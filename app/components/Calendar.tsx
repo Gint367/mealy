@@ -74,7 +74,7 @@ export function Calendar() {
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="mx-auto p-4 w-full">
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div className="p-6">
                     <div className="flex items-center justify-between mb-4">

@@ -1,10 +1,4 @@
-name = "prisma-d1-example"
-main = "src/index.ts"
-compatibility_date = "2024-03-20"
-compatibility_flags = ["nodejs_compat"]
-
-//TODO: Fix Remote Connection
 [[d1_databases]]
 binding = "DB"
-database_name = "mealy-prisma-db"
-database_id = "04057753-b9fc-4732-bc2c-254049c85d54"
+database_name = "mealy"
+database_id = "6c8c287c-f6a5-4633-a82a-3ddba9a4b631"
