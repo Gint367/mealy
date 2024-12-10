@@ -14,7 +14,7 @@ interface Recipe {
 
 export default function RecipeSearch() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [recipes, setRecipes] = useState<Recipe[]>([
+  const [recipes] = useState<Recipe[]>([
     { id: '1', name: 'Spaghetti Bolognese' },
     { id: '2', name: 'Chicken Curry' },
     { id: '3', name: 'Beef Stroganoff' },
