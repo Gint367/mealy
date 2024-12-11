@@ -25,6 +25,9 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
+  recipes Recipe[] // Relations to recipes created by the user
+  meals   Meal[] // Relations to meals planned by the user
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -84,4 +87,52 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Recipe {
+  id          String             @id @default(cuid())
+  title       String
+  description String
+  image       String? // URL of the image (optional)
+  creator     User               @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId   String
+  ingredients RecipeIngredient[] // Relations to ingredients with amounts
+  meals       Meal[] // Relations to meals using this recipe
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Ingredient {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  recipeIngredients RecipeIngredient[] // Relations to recipes that include this ingredient
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model RecipeIngredient {
+  id           String     @id @default(cuid())
+  recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId     String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  ingredientId String
+  amount       Float // Amount of the ingredient used in the recipe
+  unit         String // Unit of measurement (e.g., "grams", "cups")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([recipeId, ingredientId])
+}
+
+model Meal {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId  String
+  date      DateTime // The date of the meal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date, recipeId]) // A user can have multiple meals (recipes) per day
 }
