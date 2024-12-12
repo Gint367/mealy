@@ -1,3 +1,4 @@
+"use client"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
@@ -6,20 +7,31 @@ import { Label } from '@radix-ui/react-label'
 import { Bell, PenSquare, LogOut, Lock } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import React from 'react'
+import { useSession } from 'next-auth/react'
 
 const page = () => {
+    const { status, data: session } = useSession();
+
+    if (status === 'loading') {
+        return <div>Loading...</div>;
+    }
+
+    if (status === 'unauthenticated') {
+        return <div>You need to be authenticated to view this page.</div>;
+    }
+
     return (
         <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
             <Card className="max-w-2xl mx-auto">
                 <CardHeader className="text-center">
                     <div className="flex justify-center mb-4">
                         <Avatar className="w-24 h-24">
-                            <AvatarImage src="/placeholder.svg?height=96&width=96" alt="Profile picture" />
-                            <AvatarFallback>JD</AvatarFallback>
+                            <AvatarImage src={session?.user!.image || "/placeholder.svg?height=96&width=96"} alt="Profile picture" />
+                            <AvatarFallback>{session?.user!.name ? session?.user!.name[0] : 'JD'}</AvatarFallback>
                         </Avatar>
                     </div>
-                    <CardTitle className="text-2xl font-bold">John Doe</CardTitle>
-                    <CardDescription>john.doe@example.com</CardDescription>
+                    <CardTitle className="text-2xl font-bold">{session?.user!.name || 'John Doe'}</CardTitle>
+                    <CardDescription>{session?.user!.email || 'john.doe@example.com'}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
@@ -28,11 +40,11 @@ const page = () => {
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Name</Label>
-                                    <Input id="name" defaultValue="John Doe" />
+                                    <Input id="name" defaultValue={session?.user!.name || 'John Doe'} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" defaultValue="john.doe@example.com" />
+                                    <Input id="email" type="email" defaultValue={session?.user!.email || 'john.doe@example.com'} />
                                 </div>
                             </div>
                         </div>
