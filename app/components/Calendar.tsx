@@ -77,18 +77,16 @@ export function Calendar() {
         <div className="mx-auto p-4 w-full">
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center">
-                            <Button variant="ghost" size="icon" onClick={previousMonth}>
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <h2 className="text-xl font-semibold mx-4">
-                                {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
-                            </h2>
-                            <Button variant="ghost" size="icon" onClick={nextMonth}>
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
+                    <div className="flex items-center justify-center gap-4 mb-4">
+                        <Button variant="ghost" size="icon" onClick={previousMonth}>
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <h2 className="text-xl font-semibold mx-4">
+                            {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                        </h2>
+                        <Button variant="ghost" size="icon" onClick={nextMonth}>
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
                     </div>
                     <div className="grid grid-cols-7 gap-px bg-muted">
                         {weekDays.map((day) => (
@@ -108,7 +106,7 @@ export function Calendar() {
                                     onClick={() => handleDateSelect(date)}
                                     className={cn(
                                         "p-3 bg-background hover:bg-muted transition-colors relative h-24 text-left",
-                                        "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                                        "focus:outline-none",
                                         event && "bg-muted/50"
                                     )}
                                 >

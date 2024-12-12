@@ -21,7 +21,7 @@ export default function Header() {
                 </nav>
             </div>
 
-            <Link href="/profile" className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+            <Link href="/profilepage" className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
                 <span>P</span>
             </Link>
         </header>

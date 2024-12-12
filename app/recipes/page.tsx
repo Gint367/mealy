@@ -1,6 +1,6 @@
 import RecipeSearch from "@/components/recipe-search";
 
-export default function ShoppingList() {
+export default function Recipes() {
     return (
         <div>
             <RecipeSearch />
