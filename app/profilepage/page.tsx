@@ -6,10 +6,10 @@ import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
 import { Label } from '@radix-ui/react-label'
 import { Bell, PenSquare, LogOut, Lock } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import React from 'react'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
-const page = () => {
+const Page = () => {
     const { status, data: session } = useSession();
 
     if (status === 'loading') {
@@ -26,12 +26,12 @@ const page = () => {
                 <CardHeader className="text-center">
                     <div className="flex justify-center mb-4">
                         <Avatar className="w-24 h-24">
-                            <AvatarImage src={session?.user!.image || "/placeholder.svg?height=96&width=96"} alt="Profile picture" />
-                            <AvatarFallback>{session?.user!.name ? session?.user!.name[0] : 'JD'}</AvatarFallback>
+                            <AvatarImage src={session?.user?.image || ""} alt="Profile picture" />
+                            <AvatarFallback>{session?.user?.name ? session.user.name[0] : 'JD'}</AvatarFallback>
                         </Avatar>
                     </div>
-                    <CardTitle className="text-2xl font-bold">{session?.user!.name || 'John Doe'}</CardTitle>
-                    <CardDescription>{session?.user!.email || 'john.doe@example.com'}</CardDescription>
+                    <CardTitle className="text-2xl font-bold">{session?.user?.name || 'John Doe'}</CardTitle>
+                    <CardDescription>{session?.user?.email || 'john.doe@example.com'}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-6">
@@ -40,11 +40,11 @@ const page = () => {
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Name</Label>
-                                    <Input id="name" defaultValue={session?.user!.name || 'John Doe'} />
+                                    <Input id="name" defaultValue={session?.user?.name || 'John Doe'} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" defaultValue={session?.user!.email || 'john.doe@example.com'} />
+                                    <Input id="email" type="email" defaultValue={session?.user?.email || 'john.doe@example.com'} />
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,9 @@ const page = () => {
                             </Button>
                             <Button variant="outline" className="w-full text-red-600 hover:text-red-700 hover:bg-red-50">
                                 <LogOut className="w-4 h-4 mr-2" />
-                                Logout
+                                <Link href="/api/auth/signout">
+                                    Logout
+                                </Link>
                             </Button>
                         </div>
                     </div>
@@ -84,4 +86,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
