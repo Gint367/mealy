@@ -1,6 +1,16 @@
 "use client"
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 
 
 export default function Header() {
@@ -27,7 +37,25 @@ export default function Header() {
             <div>
                 {
                     status === "authenticated" && (
-                        <Link href="/api/auth/signout" >Log Out</Link>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Avatar>
+                                    <AvatarImage src={session?.user!.image! || ""} />
+                                    <AvatarFallback>Me</AvatarFallback>
+                                </Avatar>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    {session?.user?.email}
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                    <Link className='block w-full' href="/profilepage">View Profile</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link className='block w-full' href="/api/auth/signout">Log Out</Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     )
                 }
                 {
@@ -38,4 +66,4 @@ export default function Header() {
             </div>
         </nav>
     );
-} 
+}
