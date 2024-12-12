@@ -38,13 +38,13 @@ export default function Header() {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Avatar>
-                                    <AvatarImage src={session?.user!.image! || ""} />
+                                    <AvatarImage src={session?.user?.image || ""} />
                                     <AvatarFallback>Me</AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuLabel>
-                                    {session?.user?.email}
+                                    {session?.user?.email || ""}
                                 </DropdownMenuLabel>
                                 <DropdownMenuItem>
                                     <Link className='block w-full' href="/profilepage">View Profile</Link>
