@@ -41,7 +41,7 @@ export default function RecipeSearch({ initialRecipes }: RecipeSearchProps) {
                 placeholder="Search recipes..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="mb-4 border border-primary/50"
+                className="mb-4 border border-primary/50 bg-primary-foreground"
             />
             {recipes.length > 0 ? (
                 <Table>
@@ -51,7 +51,7 @@ export default function RecipeSearch({ initialRecipes }: RecipeSearchProps) {
                                 <TableCell className="p-0">
                                     <Link
                                         href={`/recipes/${recipe.id}`}
-                                        className="block p-4 transition-colors duration-200 ease-in-out hover:bg-primary/10 group-hover:text-primary"
+                                        className="block p-4 my-1 transition-colors duration-200 ease-in-out bg-card hover:bg-primary/10 group-hover:text-primary border rounded-lg"
                                     >
                                         {recipe.title}
                                     </Link>
