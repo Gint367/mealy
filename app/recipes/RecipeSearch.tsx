@@ -4,12 +4,7 @@ import { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import {
     Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+    TableBody, TableCell, TableRow
 } from "@/components/ui/table"
 import { Recipe } from '@prisma/client'
 import Link from 'next/link'
