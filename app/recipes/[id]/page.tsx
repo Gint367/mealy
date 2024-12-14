@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
 import PortionSizeControl from "@/app/components/PortionSizeControl";
+import Image from "next/image";
 
 interface RecipeDetailProps {
     params: { id: string }
@@ -62,7 +63,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
 
             {recipe.image && (
                 <div className="mt-8">
-                    <img src={recipe.image} alt={recipe.title} className="rounded-lg max-w-full h-auto" />
+                    <Image src={recipe.image} alt={recipe.title} className="rounded-lg max-w-full h-auto" />
                 </div>
             )}
 
