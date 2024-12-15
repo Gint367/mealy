@@ -1,10 +1,8 @@
-"use client"
-
-import { useState } from "react"
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { DayPopup } from "@/components/day-popup"
+"use client";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface CalendarEvent {
     date: Date
@@ -81,7 +79,7 @@ export function Calendar() {
                         <Button variant="ghost" size="icon" onClick={previousMonth}>
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <h2 className="text-xl font-semibold mx-4">
+                        <h2 className="text-xl font-semibold text-foreground">
                             {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
                         </h2>
                         <Button variant="ghost" size="icon" onClick={nextMonth}>
@@ -90,12 +88,12 @@ export function Calendar() {
                     </div>
                     <div className="grid grid-cols-7 gap-px bg-muted">
                         {weekDays.map((day) => (
-                            <div key={day} className="p-3 text-center text-sm font-medium">
+                            <div key={day} className="p-3 text-center text-sm font-medium text-foreground bg-background">
                                 {day}
                             </div>
                         ))}
                         {Array.from({ length: startingDay }).map((_, index) => (
-                            <div key={`empty-${index}`} className="p-3 bg-background" />
+                            <div key={`empty-${index}`} className="p-3 bg-muted/50" />
                         ))}
                         {days.map((day) => {
                             const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
@@ -105,12 +103,12 @@ export function Calendar() {
                                     key={day}
                                     onClick={() => handleDateSelect(date)}
                                     className={cn(
-                                        "p-3 bg-background hover:bg-muted transition-colors relative h-24 text-left",
-                                        "focus:outline-none",
-                                        event && "bg-muted/50"
+                                        "p-3 bg-card hover:bg-accent transition-colors relative h-24 text-left",
+                                        "focus:outline-none focus:ring-1 focus:ring-ring ",
+                                        event && "bg-accent/50"
                                     )}
                                 >
-                                    <span className="text-sm font-medium">{day}</span>
+                                    <span className="text-sm font-medium text-foreground">{day}</span>
                                     {event && (
                                         <div className="mt-1">
                                             <span className="text-xs text-muted-foreground">{event.title}</span>
@@ -122,13 +120,6 @@ export function Calendar() {
                     </div>
                 </div>
             </div>
-            <DayPopup
-                isOpen={isPopupOpen}
-                onClose={() => setIsPopupOpen(false)}
-                date={selectedDate}
-                onSave={handleSaveEvent}
-                existingEvent={selectedDate ? getEventForDate(selectedDate) : undefined}
-            />
         </div>
     )
 }

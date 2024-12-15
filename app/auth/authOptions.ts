@@ -24,7 +24,9 @@ const authOptions: NextAuthOptions = {
         }
     },
     secret: process.env.NEXTAUTH_SECRET,
-
+    theme: {
+        colorScheme: 'dark',
+    }
 }
 
 export default authOptions
