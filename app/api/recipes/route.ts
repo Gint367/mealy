@@ -6,13 +6,18 @@ import authOptions from "@/app/auth/authOptions";
 
 const prisma = new PrismaClient();
 
+interface Ingredient {
+    name: string;
+    amount: number;
+    unit: string;
+}
 const recipeSchema = z.object({
     title: z.string().min(1, 'Title is required').max(255),
     description: z.string().min(1, 'Description is required'),
     ingredients: z.array(
         z.object({
             name: z.string().min(1, 'Ingredient name is required'),
-            amount: z.number().min(0, 'Amount must be a positive number'), // Transform to Float
+            amount: z.coerce.number().min(0.01, 'Amount must be a positive number'),
             unit: z.string().min(1, 'Unit is required'),
         })
     ).min(1, 'At least one ingredient is required'),
@@ -38,7 +43,7 @@ export async function POST(request: NextRequest) {
             description,
             creatorId: session.user.id,
             ingredients: {
-                create: ingredients.map((ingredient: any) => ({
+                create: ingredients.map((ingredient: Ingredient) => ({
                     ingredient: {
                         connectOrCreate: {
                             where: { name: ingredient.name },

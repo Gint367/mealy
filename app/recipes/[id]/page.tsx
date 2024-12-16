@@ -1,36 +1,35 @@
-
-import { Button } from "@/components/ui/button";
-import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
+import prisma from '@/prisma/client';
+import { Button } from "@/components/ui/button";
 import PortionSizeControl from "@/app/components/PortionSizeControl";
 import Image from "next/image";
 
 interface RecipeDetailProps {
-    params: { id: string }
+    params: Promise<{ id: string }>;
 }
 
-const fetchRecipe = async (id: string) => prisma.recipe.findUnique({
-    where: { id },
-    include: {
-        creator: true,
-        ingredients: {
-            include: { ingredient: true }
+const fetchRecipe = async (id: string) => {
+    const recipe = await prisma.recipe.findUnique({
+        where: { id },
+        include: {
+            creator: true,
+            ingredients: {
+                include: { ingredient: true }
+            }
         }
-    }
-})
+    });
+
+    return recipe;
+};
 
 export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
-    //TODO: fix JWT auth error
-    /*     const session = await getServerSession(authOptions)
-    
-        if (!session) {
-            redirect('/auth/signin');
-        }
-    
-     */
-    const { id } = await params
-    const recipe = await fetchRecipe(id)
-    if (!recipe) return notFound()
+
+    const { id } = await params;
+    const recipe = await fetchRecipe(id);
+
+    if (!recipe) {
+        return notFound();
+    }
 
     return (
         <div className="container mx-auto p-4 pb-24 min-h-screen flex flex-col">
@@ -41,7 +40,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
                     <h2 className="text-2xl font-semibold mb-4">Ingredients</h2>
                     <ul className="list-disc pl-5 space-y-2">
                         {recipe.ingredients.map((recipeIngredient) => (
-                            <li key={recipeIngredient.id}>
+                            <li key={recipeIngredient.ingredient.name}>
                                 {recipeIngredient.ingredient.name} - {recipeIngredient.amount} {recipeIngredient.unit}
                             </li>
                         ))}
@@ -70,13 +69,12 @@ export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
             <div className="sticky bottom-0 left-0 right-0 bg-background border-t p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <span className="text-lg font-semibold">Portion Size:</span>
-                    <PortionSizeControl initialSize={1} />
+                    <PortionSizeControl initialSize={1} onChange={() => { }} />
                 </div>
                 <Button className="ml-4">
                     Add to Calendar
                 </Button>
             </div>
         </div>
-    )
+    );
 }
-

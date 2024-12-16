@@ -13,10 +13,14 @@ interface CalendarEvent {
     title: string
     portionSize: number
 }
-
+interface Meal {
+    date: string;
+    recipe: {
+        title: string;
+    };
+}
 export function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(new Date())
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
     const [events, setEvents] = useState<CalendarEvent[]>([])
     const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
@@ -33,7 +37,7 @@ export function Calendar() {
                     throw new Error('Failed to fetch meals')
                 }
                 const data = await response.json()
-                const calendarEvents = data.map((meal: any) => ({
+                const calendarEvents = data.map((meal: Meal) => ({
                     date: new Date(meal.date),
                     title: meal.recipe.title
                 }))
