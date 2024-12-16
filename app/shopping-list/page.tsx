@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
     Collapsible,
@@ -10,16 +10,36 @@ import {
 } from '@/components/ui/collapsible'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDate, getWeekDates } from '../utils/date'
-import { getMockMealsForWeek } from '../actions/shopping-list'
 
 export default function ShoppingListPage() {
     const [weekOffset, setWeekOffset] = useState(0)
     const weekDates = getWeekDates(weekOffset)
     const [meals, setMeals] = useState<Meal[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    const [openCollapsible, setOpenCollapsible] = useState<string | null>(null)
 
     useEffect(() => {
-        getMockMealsForWeek().then(setMeals)
-    }, [])
+        async function fetchMeals() {
+            try {
+                const response = await fetch('/api/shopping-list')
+                if (!response.ok) {
+                    throw new Error('Failed to fetch meals')
+                }
+                const data: Meal[] = await response.json()
+                setMeals(data)
+            } catch (err: any) {
+                setError(err.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchMeals()
+    }, [weekOffset])
+
+    if (loading) return <Loader2 className="animate-spin" />
+    if (error) return <div>Error: {error}</div>
+
 
     // Group meals by date
     interface Ingredient {
@@ -45,12 +65,14 @@ export default function ShoppingListPage() {
         recipe: Recipe;
     }
 
+
+    // Group meals by date
     const mealsByDate = meals.reduce((acc: Record<string, Meal[]>, meal: Meal) => {
-        const date = formatDate(meal.date);
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(meal);
-        return acc;
-    }, {} as Record<string, Meal[]>);
+        const date = formatDate(new Date(meal.date))
+        if (!acc[date]) acc[date] = []
+        acc[date].push(meal)
+        return acc
+    }, {})
 
     // Aggregate all ingredients for the week
     const weeklyIngredients = meals.reduce((acc, meal) => {
@@ -95,7 +117,7 @@ export default function ShoppingListPage() {
                     const dayMeals = mealsByDate[dateStr] || []
 
                     return (
-                        <Collapsible key={dateStr}>
+                        <Collapsible key={dateStr} open={openCollapsible === dateStr} onOpenChange={() => setOpenCollapsible(openCollapsible === dateStr ? null : dateStr)}>
                             <CollapsibleTrigger asChild>
                                 <Button
                                     variant="outline"
