@@ -15,3 +15,4 @@ export default async function RecipesPage() {
 
     );
 }
+export const dynamic = 'force-dynamic'
