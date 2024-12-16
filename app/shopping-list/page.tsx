@@ -11,9 +11,34 @@ import {
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDate, getWeekDates } from '../utils/date'
 
+interface Ingredient {
+    id: string;
+    name: string;
+}
+
+interface RecipeIngredient {
+    ingredient: Ingredient;
+    amount: number;
+    unit: string;
+}
+
+interface Recipe {
+    id: string;
+    title: string;
+    ingredients: RecipeIngredient[];
+}
+
+interface Meal {
+    id: string;
+    date: Date;
+    recipe: Recipe;
+}
+
 export default function ShoppingListPage() {
     const [weekOffset, setWeekOffset] = useState(0)
     const weekDates = getWeekDates(weekOffset)
+    const startDate = formatDate(weekDates[0])
+    const endDate = formatDate(weekDates[6])
     const [meals, setMeals] = useState<Meal[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -21,8 +46,9 @@ export default function ShoppingListPage() {
 
     useEffect(() => {
         async function fetchMeals() {
+            setLoading(true) // Reset loading state on week change
             try {
-                const response = await fetch('/api/meals')
+                const response = await fetch(`/api/meals/date-range?startDate=${startDate}&endDate=${endDate}`)
                 if (!response.ok) {
                     throw new Error('Failed to fetch meals')
                 }
@@ -35,46 +61,12 @@ export default function ShoppingListPage() {
             }
         }
         fetchMeals()
-    }, [weekOffset])
+    }, [weekOffset, startDate, endDate])
 
     if (loading) return <Loader2 className="animate-spin" />
     if (error) return <div>Error: {error}</div>
 
-
-    // Group meals by date
-    interface Ingredient {
-        id: string;
-        name: string;
-    }
-
-    interface RecipeIngredient {
-        ingredient: Ingredient;
-        amount: number;
-        unit: string;
-    }
-
-    interface Recipe {
-        id: string;
-        title: string;
-        ingredients: RecipeIngredient[];
-    }
-
-    interface Meal {
-        id: string;
-        date: Date;
-        recipe: Recipe;
-    }
-
-
-    // Group meals by date
-    const mealsByDate = meals.reduce((acc: Record<string, Meal[]>, meal: Meal) => {
-        const date = formatDate(new Date(meal.date))
-        if (!acc[date]) acc[date] = []
-        acc[date].push(meal)
-        return acc
-    }, {})
-
-    // Aggregate all ingredients for the week
+    // Aggregate ingredients directly from fetched meals
     const weeklyIngredients = meals.reduce((acc, meal) => {
         meal.recipe.ingredients.forEach((ri) => {
             const key = ri.ingredient.name
@@ -85,6 +77,14 @@ export default function ShoppingListPage() {
         })
         return acc
     }, {} as Record<string, { amount: number; unit: string }>)
+
+    // Group meals by date
+    const mealsByDate = meals.reduce((acc: Record<string, Meal[]>, meal: Meal) => {
+        const date = formatDate(new Date(meal.date))
+        if (!acc[date]) acc[date] = []
+        acc[date].push(meal)
+        return acc
+    }, {})
 
     const dayNames = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
@@ -161,17 +161,21 @@ export default function ShoppingListPage() {
             <Card>
                 <CardContent className="p-6">
                     <h3 className="text-lg font-semibold mb-4">Total shopping list (week):</h3>
-                    <ul className="space-y-2">
-                        {Object.entries(weeklyIngredients).map(([name, { amount, unit }]) => (
-                            <li key={name} className="flex items-center gap-2">
-                                <span>•</span>
-                                <span>{name}</span>
-                                <span className="text-muted-foreground">
-                                    [{amount} {unit}]
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
+                    {Object.keys(weeklyIngredients).length > 0 ? (
+                        <ul className="space-y-2">
+                            {Object.entries(weeklyIngredients).map(([name, { amount, unit }]) => (
+                                <li key={name} className="flex items-center gap-2">
+                                    <span>•</span>
+                                    <span>{name}</span>
+                                    <span className="text-muted-foreground">
+                                        [{amount} {unit}]
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No meals planned for this week</p>
+                    )}
                 </CardContent>
             </Card>
         </div>
