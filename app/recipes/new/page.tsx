@@ -12,15 +12,16 @@ import dynamic from 'next/dynamic';
 import { SimpleMDEReactProps } from 'react-simplemde-editor';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { Loader2 } from 'lucide-react';
 const SimpleMdeReact = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
 const recipeSchema = z.object({
-    title: z.string().min(1, 'Title is required').max(255),
+    title: z.string().min(1, 'Title is required').max(255, 'Title must be less than 255 characters'),
     description: z.string().min(1, 'Description is required'),
     ingredients: z.array(
         z.object({
             name: z.string().min(1, 'Ingredient name is required'),
-            amount: z.string().min(1, 'Amount is required').transform((val) => parseFloat(val)), // Transform to Float
+            amount: z.number().min(0.01, 'Amount must be a positive number'),
             unit: z.string().min(1, 'Unit is required'),
         })
     ).min(1, 'At least one ingredient is required'),
@@ -114,12 +115,12 @@ const NewRecipe = () => {
                         />
 
                         <FormItem className='flex flex-col'>
-                            <FormLabel>Description</FormLabel>
+                            <FormLabel>Cooking Instruction</FormLabel>
                             <Controller
                                 name="description"
                                 control={form.control}
                                 defaultValue={value}
-                                render={({ field }) => <SimpleMdeReact placeholder="The Issue is..." {...field} />}
+                                render={({ field }) => <SimpleMdeReact placeholder="To cook this I need to..." {...field} />}
                             >
                             </Controller>
                             <FormMessage className="text-sm text-muted-foreground" />
@@ -149,7 +150,7 @@ const NewRecipe = () => {
                                             <FormControl>
                                                 <Input type="number" step="1" className='bg-background' placeholder="Quantity" {...field} />
                                             </FormControl>
-                                            <FormMessage className="text-sm text-muted-foreground truncate" />
+                                            <FormMessage className="text-sm text-muted-foreground" />
                                         </FormItem>
                                     )}
                                 />
@@ -186,7 +187,7 @@ const NewRecipe = () => {
                         </Button>
 
                         <Button type="submit" className="flex items-center">
-                            Create Recipe
+                            {isSubmitting ? <Loader2 className="animate-spin" /> : 'Create Recipe'}
 
                         </Button>
                     </form>
