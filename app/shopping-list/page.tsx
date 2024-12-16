@@ -22,7 +22,7 @@ export default function ShoppingListPage() {
     useEffect(() => {
         async function fetchMeals() {
             try {
-                const response = await fetch('/api/shopping-list')
+                const response = await fetch('/api/meals')
                 if (!response.ok) {
                     throw new Error('Failed to fetch meals')
                 }
