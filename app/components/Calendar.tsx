@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -15,19 +15,32 @@ export function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
     const [isPopupOpen, setIsPopupOpen] = useState(false)
-
-    // Month is 0-indexed !!
-    const [events, setEvents] = useState<CalendarEvent[]>([
-        { date: new Date(2024, 11, 1), title: "Team Meeting" },
-        { date: new Date(2024, 11, 2), title: "Dentist Appointment" },
-        { date: new Date(2024, 11, 8), title: "Team Building" },
-        { date: new Date(2024, 11, 15), title: "Team Lunch" },
-    ])
-
+    const [events, setEvents] = useState<CalendarEvent[]>([])
     const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
     const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
     const monthPickerRef = useRef<HTMLDivElement>(null);
     const yearPickerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        async function fetchMeals() {
+            try {
+                const response = await fetch('/api/meals')
+                if (!response.ok) {
+                    throw new Error('Failed to fetch meals')
+                }
+                const data = await response.json()
+                const calendarEvents = data.map((meal: any) => ({
+                    date: new Date(meal.date),
+                    title: meal.recipe.title
+                }))
+                setEvents(calendarEvents)
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        fetchMeals()
+    }, [])
+
     // This part of the code is responsible for closing the month and year picker when clicking outside of it
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -68,7 +81,7 @@ export function Calendar() {
         const firstDay = new Date(year, month, 1)
         const lastDay = new Date(year, month + 1, 0)
         const daysInMonth = lastDay.getDate()
-        const startingDay = firstDay.getDay()
+        const startingDay = (firstDay.getDay() + 6) % 7 // Adjust to start from Monday
         return { daysInMonth, startingDay }
     }
 
@@ -89,7 +102,7 @@ export function Calendar() {
 
     const { daysInMonth, startingDay } = getDaysInMonth(currentMonth)
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
-    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     return (
         <div className="relative mx-auto p-4 w-full">
