@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import prisma from '@/prisma/client';
 import { Button } from "@/components/ui/button";
-import PortionSizeControl from "@/app/components/PortionSizeControl";
 import Image from "next/image";
+import ReactMarkdown from 'react-markdown';
 
 interface RecipeDetailProps {
     params: Promise<{ id: string }>;
@@ -49,7 +49,9 @@ export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
 
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Cooking Instructions</h2>
-                    <p className="whitespace-pre-line">{recipe.description}</p>
+
+                    <ReactMarkdown className={"prose"}>{recipe.description}</ReactMarkdown>
+
                 </div>
             </div>
 
@@ -69,7 +71,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
             <div className="sticky bottom-0 left-0 right-0 bg-background border-t p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <span className="text-lg font-semibold">Portion Size:</span>
-                    <PortionSizeControl initialSize={1} onChange={() => { }} />
+                    {/* <PortionSizeControl initialSize={1} onChange={(newSize) => console.log(newSize)} /> */}
                 </div>
                 <Button className="ml-4">
                     Add to Calendar
