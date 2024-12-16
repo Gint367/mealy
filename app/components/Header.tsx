@@ -37,10 +37,11 @@ export default function Header() {
                 <ModeToggle />
                 {
                     status === "authenticated" && (
+                        console.log("authenticated"),
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Avatar>
-                                    <AvatarImage src={session?.user?.image || ""} />
+                                    <AvatarImage src={session?.user?.image || "P"} />
                                     <AvatarFallback>Me</AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
@@ -58,6 +59,12 @@ export default function Header() {
                         </DropdownMenu>
                     )
                 }
+                {
+                    status === "unauthenticated" && (
+                        <Link href="/api/auth/signin" >Log In</Link>
+                    )
+                }
+
             </div>
         </nav>
     );

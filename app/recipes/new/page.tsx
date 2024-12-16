@@ -1,16 +1,17 @@
-'use client';
+'use client';;
 import { useCallback, useMemo, useState } from 'react';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
 import "easymde/dist/easymde.min.css";
 import dynamic from 'next/dynamic';
 import { SimpleMDEReactProps } from 'react-simplemde-editor';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 const SimpleMdeReact = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
 const recipeSchema = z.object({
@@ -19,17 +20,18 @@ const recipeSchema = z.object({
     ingredients: z.array(
         z.object({
             name: z.string().min(1, 'Ingredient name is required'),
-            amount: z.string().min(1, 'Qt is required'),
+            amount: z.string().min(1, 'Amount is required').transform((val) => parseFloat(val)), // Transform to Float
             unit: z.string().min(1, 'Unit is required'),
         })
     ).min(1, 'At least one ingredient is required'),
-})
+});
 
 type RecipeFormValues = z.infer<typeof recipeSchema>
 
 
 const NewRecipe = () => {
 
+    const router = useRouter()
     const [error, setError] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -38,33 +40,9 @@ const NewRecipe = () => {
         defaultValues: {
             title: '',
             description: '',
-            ingredients: [{ name: '', amount: '', unit: '' }],
+            ingredients: [{ name: '', amount: 0, unit: '' }],
         },
     })
-
-    const onSubmit = async (data: RecipeFormValues) => {
-        setIsSubmitting(true)
-        setError(null)
-
-        try {
-            // Here you would typically send the data to your API
-            console.log('Submitting recipe:', { ...data, description: form.getValues('description') })
-            // Simulating API call
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            // Reset form after successful submission
-            form.reset()
-
-        } catch (err) {
-            setError('An error occurred while submitting the recipe. Please try again.')
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
-    const onDeleteIngredient = (index: number) => {
-        const ingredients = form.watch('ingredients');
-        form.setValue('ingredients', ingredients.filter((_, i) => i !== index));
-    };
 
     const [value, setValue] = useState("Start writing your recipe...");
 
@@ -78,6 +56,36 @@ const NewRecipe = () => {
             spellChecker: false,
         } as SimpleMDEReactProps;
     }, []);
+
+    const onSubmit = async (data: RecipeFormValues) => {
+        setIsSubmitting(true);
+        setError(null);
+        console.log("test")
+        try {
+            const response = await axios.post('/api/recipes', {
+                ...data,
+                description: value, // Use SimpleMDE value
+            });
+
+            if (response.status === 201) {
+                router.push('/recipes');
+                router.refresh();
+            }
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data?.message || 'Failed to create recipe');
+            } else {
+                setError('An error occurred');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const onDeleteIngredient = (index: number) => {
+        const ingredients = form.watch('ingredients');
+        form.setValue('ingredients', ingredients.filter((_, i) => i !== index));
+    };
 
     return (
         <div className="container mx-auto p-4">
@@ -107,13 +115,13 @@ const NewRecipe = () => {
 
                         <FormItem className='flex flex-col'>
                             <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <SimpleMdeReact
-                                    options={autofocusNoSpellcheckerOptions}
-                                    value={value}
-                                    onChange={onChange}
-                                />
-                            </FormControl>
+                            <Controller
+                                name="description"
+                                control={form.control}
+                                defaultValue={value}
+                                render={({ field }) => <SimpleMdeReact placeholder="The Issue is..." {...field} />}
+                            >
+                            </Controller>
                             <FormMessage className="text-sm text-muted-foreground" />
                         </FormItem>
 
@@ -139,7 +147,7 @@ const NewRecipe = () => {
                                         <FormItem className="w-24">
                                             <FormLabel>Quantity</FormLabel>
                                             <FormControl>
-                                                <Input className='bg-background' placeholder="Quantity" {...field} />
+                                                <Input type="number" step="1" className='bg-background' placeholder="Quantity" {...field} />
                                             </FormControl>
                                             <FormMessage className="text-sm text-muted-foreground truncate" />
                                         </FormItem>
@@ -172,14 +180,14 @@ const NewRecipe = () => {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: '', unit: '' }])}
+                            onClick={() => form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 0, unit: '' }])}
                         >
                             Add Ingredient
                         </Button>
 
-                        <Button type="submit" disabled={isSubmitting} className="flex items-center">
+                        <Button type="submit" className="flex items-center">
                             Create Recipe
-                            {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+
                         </Button>
                     </form>
                 </Form>

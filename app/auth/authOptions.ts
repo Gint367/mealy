@@ -12,21 +12,33 @@ const authOptions: NextAuthOptions = {
         })
     ],
     session: {
-        strategy: 'jwt',
+        strategy: 'jwt'
     },
     callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.id as string
+                }
+            };
+        },
         async redirect({ url, baseUrl }) {
-            // Allows relative callback URLs
-            //if (url.startsWith("/")) return `${baseUrl}${url}`
-            // Allows callback URLs on the same origin
-            //if (new URL(url).origin === baseUrl) return url
-            return baseUrl
+            return baseUrl;
         }
     },
     secret: process.env.NEXTAUTH_SECRET,
     theme: {
         colorScheme: 'dark',
     }
-}
+};
+
 
 export default authOptions
