@@ -13,7 +13,27 @@ import { SimpleMDEReactProps } from 'react-simplemde-editor';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 const SimpleMdeReact = dynamic(() => import('react-simplemde-editor'), { ssr: false });
+
+const UNIT_OPTIONS = [
+    { label: 'Milligrams', value: 'milligrams' },
+    { label: 'Grams', value: 'grams' },
+    { label: 'Kilograms', value: 'kilograms' },
+    { label: 'Milliliters', value: 'milliliters' },
+    { label: 'Liters', value: 'liters' },
+    { label: 'Cups', value: 'cups' },
+    { label: 'Teaspoons', value: 'teaspoons' },
+    { label: 'Tablespoons', value: 'tablespoons' },
+    { label: 'Pieces', value: 'pieces' },
+    { label: 'Slices', value: 'slices' },
+    { label: 'Cloves', value: 'cloves' },
+    { label: 'Packages', value: 'packages' },
+    { label: 'Cans', value: 'cans' },
+    { label: 'Bottles', value: 'bottles' },
+    { label: 'Pinches', value: 'pinches' },
+];
+
 
 const recipeSchema = z.object({
     title: z.string().min(1, 'Title is required').max(255, 'Title must be less than 255 characters'),
@@ -22,11 +42,12 @@ const recipeSchema = z.object({
         z.object({
             name: z.string().min(1, 'Ingredient name is required'),
             amount: z.number().min(0.01, 'Amount must be a positive number'),
-            unit: z.string().min(1, 'Unit is required'),
+            unit: z.enum(UNIT_OPTIONS.map(option => option.value) as [string, ...string[]], {
+                errorMap: () => ({ message: 'Select a valid unit from the list' }),
+            }),
         })
     ).min(1, 'At least one ingredient is required'),
 });
-
 type RecipeFormValues = z.infer<typeof recipeSchema>
 
 
@@ -41,7 +62,7 @@ const NewRecipe = () => {
         defaultValues: {
             title: '',
             description: '',
-            ingredients: [{ name: '', amount: 0, unit: '' }],
+            ingredients: [{ name: '', amount: 0, unit: 'grams' }],
         },
     })
 
@@ -84,8 +105,7 @@ const NewRecipe = () => {
     };
 
     const onDeleteIngredient = (index: number) => {
-        const ingredients = form.watch('ingredients');
-        form.setValue('ingredients', ingredients.filter((_, i) => i !== index));
+        form.setValue('ingredients', form.watch('ingredients').filter((_, i) => i !== index));
     };
 
     return (
@@ -158,10 +178,28 @@ const NewRecipe = () => {
                                     control={form.control}
                                     name={`ingredients.${index}.unit`}
                                     render={({ field }) => (
-                                        <FormItem className="w-24">
+                                        <FormItem className="w-40">
                                             <FormLabel>Unit</FormLabel>
                                             <FormControl>
-                                                <Input className='bg-background' placeholder="Unit" {...field} />
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger className="bg-background w-full text-left p-2 border rounded">
+                                                        {field.value
+                                                            ? UNIT_OPTIONS.find((unit) => unit.value === field.value)?.label
+                                                            : 'Select unit'}
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent>
+                                                        <DropdownMenuLabel>Select a Unit</DropdownMenuLabel>
+                                                        <DropdownMenuSeparator />
+                                                        {UNIT_OPTIONS.map((unit, idx) => (
+                                                            <DropdownMenuItem
+                                                                key={unit.value}
+                                                                onSelect={() => field.onChange(unit.value)}
+                                                            >
+                                                                {unit.label}
+                                                            </DropdownMenuItem>
+                                                        ))}
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </FormControl>
                                             <FormMessage className="text-sm text-muted-foreground" />
                                         </FormItem>
@@ -181,7 +219,7 @@ const NewRecipe = () => {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 0, unit: '' }])}
+                            onClick={() => form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 0, unit: 'grams' }])}
                         >
                             Add Ingredient
                         </Button>
