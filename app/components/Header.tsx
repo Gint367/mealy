@@ -18,15 +18,16 @@ export default function Header() {
         <nav className="flex items-center justify-between px-6 py-4 border-b bg-background">
             <div className="flex items-center space-x-8">
                 <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                    <span className="text-lg font-semibold text-foreground">M</span>
+                    <Link href="/" className="text-lg font-semibold text-foreground">M</Link>
+
                 </div>
 
                 <nav className="flex space-x-6">
-                    <Link href="/recipes" className="px-4 py-2 hover:bg-accent rounded-md text-foreground">
-                        Recipes
-                    </Link>
                     <Link href="/" className="px-4 py-2 hover:bg-accent rounded-md text-foreground">
                         Calendar
+                    </Link>
+                    <Link href="/recipes" className="px-4 py-2 hover:bg-accent rounded-md text-foreground">
+                        Recipes
                     </Link>
                     <Link href="/shopping-list" className="px-4 py-2 hover:bg-accent rounded-md text-foreground">
                         Shopping List
