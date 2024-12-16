@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MonthPicker } from "@/components/MonthPicker";
 import { YearPicker } from "@/components/YearPicker";
+import { MealEditPopup } from './MealEditPopup';
 
 interface CalendarEvent {
+    id: string
     date: Date
     title: string
+    portionSize: number
 }
 
 export function Calendar() {
@@ -20,6 +23,7 @@ export function Calendar() {
     const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
     const monthPickerRef = useRef<HTMLDivElement>(null);
     const yearPickerRef = useRef<HTMLDivElement>(null);
+    const [selectedMeal, setSelectedMeal] = useState<CalendarEvent | null>(null);
 
     useEffect(() => {
         async function fetchMeals() {
@@ -61,8 +65,11 @@ export function Calendar() {
     }, [isMonthPickerOpen, isYearPickerOpen]);
 
     const handleDateSelect = (date: Date) => {
-        setSelectedDate(date)
-        setIsPopupOpen(true)
+        const event = getEventForDate(date);
+        if (event) {
+            setSelectedMeal(event);
+            setIsPopupOpen(true);
+        }
     }
 
     const handleDateChange = (year: number | null, month: number | null) => {
@@ -90,6 +97,16 @@ export function Calendar() {
             event.date.toDateString() === date.toDateString()
         )
     }
+
+    const handleUpdatePortionSize = (id: string, newSize: number) => {
+        setEvents(events.map(event =>
+            event.id === id ? { ...event, portionSize: newSize } : event
+        ));
+    };
+
+    const handleDeleteMeal = (id: string) => {
+        setEvents(events.filter(event => event.id !== id));
+    };
 
     const nextMonth = () => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))
@@ -180,6 +197,15 @@ export function Calendar() {
                     </div>
                 </div>
             </div>
+            {selectedMeal && (
+                <MealEditPopup
+                    isOpen={isPopupOpen}
+                    onClose={() => setIsPopupOpen(false)}
+                    meal={selectedMeal}
+                    onDelete={handleDeleteMeal}
+                    onUpdatePortionSize={handleUpdatePortionSize}
+                />
+            )}
         </div>
     )
 }
