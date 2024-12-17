@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/collapsible'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDate, getWeekDates } from '../utils/date'
+import { cn } from '@/lib/utils'
 
 interface Ingredient {
     id: string;
@@ -125,7 +126,10 @@ export default function ShoppingListPage() {
                             <CollapsibleTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="w-full min-h-[60px] flex flex-col gap-1"
+                                    className={cn(
+                                        "w-full min-h-[60px] flex flex-col gap-1",
+                                        dayMeals.length > 0 ? "bg-accent" : ""
+                                    )}
                                 >
                                     <span>{day}</span>
                                     <span className="text-xs text-muted-foreground">
