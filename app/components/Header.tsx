@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ModeToggle } from './ModeToggle';
-
+import { Loader2 } from 'lucide-react';
 
 
 export default function Header() {
@@ -36,6 +36,11 @@ export default function Header() {
             </div>
             <div className='flex items-center space-x-4'>
                 <ModeToggle />
+                {
+                    status === "loading" && (
+                        <Loader2 /> // Show spinner when loading
+                    )
+                }
                 {
                     status === "authenticated" && (
                         console.log("authenticated"),

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { MonthPicker } from "@/components/MonthPicker";
 import { YearPicker } from "@/components/YearPicker";
 import { MealEditPopup } from './MealEditPopup';
+import { useSession } from 'next-auth/react'; // Import useSession from next-auth/react
 
 interface CalendarEvent {
     id: string
@@ -20,6 +21,7 @@ interface Meal {
     };
 }
 export function Calendar() {
+    const { status } = useSession(); // Get the session status
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [isPopupOpen, setIsPopupOpen] = useState(false)
     const [events, setEvents] = useState<CalendarEvent[]>([])
@@ -30,24 +32,26 @@ export function Calendar() {
     const [selectedMeal, setSelectedMeal] = useState<CalendarEvent | null>(null);
 
     useEffect(() => {
-        async function fetchMeals() {
-            try {
-                const response = await fetch('/api/meals')
-                if (!response.ok) {
-                    throw new Error('Failed to fetch meals')
+        if (status === "authenticated") { // Only fetch meals if the user is authenticated
+            async function fetchMeals() {
+                try {
+                    const response = await fetch('/api/meals')
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch meals')
+                    }
+                    const data = await response.json()
+                    const calendarEvents = data.map((meal: Meal) => ({
+                        date: new Date(meal.date),
+                        title: meal.recipe.title
+                    }))
+                    setEvents(calendarEvents)
+                } catch (err) {
+                    console.error(err)
                 }
-                const data = await response.json()
-                const calendarEvents = data.map((meal: Meal) => ({
-                    date: new Date(meal.date),
-                    title: meal.recipe.title
-                }))
-                setEvents(calendarEvents)
-            } catch (err) {
-                console.error(err)
             }
+            fetchMeals()
         }
-        fetchMeals()
-    }, [])
+    }, [status]) // Add status as a dependency
 
     // This part of the code is responsible for closing the month and year picker when clicking outside of it
     useEffect(() => {
