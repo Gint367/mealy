@@ -5,7 +5,7 @@ import Image from "next/image";
 import Markdown from 'react-markdown';
 import { cache } from 'react';
 interface RecipeDetailProps {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 const fetchRecipe = cache(async (id: string) => {
