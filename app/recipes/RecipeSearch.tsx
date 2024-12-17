@@ -1,36 +1,34 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Input } from "@/components/ui/input"
+import { useState } from 'react';
+import { Input } from "@/components/ui/input";
 import {
     Table,
     TableBody, TableCell, TableRow
-} from "@/components/ui/table"
-import { Recipe } from '@prisma/client'
-import Link from 'next/link'
-
+} from "@/components/ui/table";
+import { Recipe } from '@prisma/client';
+import Link from 'next/link';
 
 interface RecipeSearchProps {
-    initialRecipes: Recipe[]
+    initialRecipes: Recipe[];
 }
 
 export default function RecipeSearch({ initialRecipes }: RecipeSearchProps) {
-    const [searchTerm, setSearchTerm] = useState('')
-    const [recipes, setRecipes] = useState(initialRecipes)
+    const [searchTerm, setSearchTerm] = useState('');
+    const [recipes, setRecipes] = useState(initialRecipes);
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const term = event.target.value
-        setSearchTerm(term)
+        const term = event.target.value;
+        setSearchTerm(term);
 
         const filteredRecipes = initialRecipes.filter(recipe =>
             recipe.title.toLowerCase().includes(term.toLowerCase())
-            // || recipe.ingredients.toLowerCase().includes(term.toLowerCase())
-        )
-        setRecipes(filteredRecipes)
-    }
+        );
+        setRecipes(filteredRecipes);
+    };
 
     return (
-        <div >
+        <div>
             <Input
                 type="text"
                 placeholder="Search recipes..."
@@ -59,6 +57,5 @@ export default function RecipeSearch({ initialRecipes }: RecipeSearchProps) {
                 <p className="text-center text-secondary-foreground">No recipes found matching your search.</p>
             )}
         </div>
-    )
+    );
 }
-
