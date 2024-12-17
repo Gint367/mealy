@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Markdown from 'react-markdown';
 import { cache } from 'react';
+import { z } from 'zod';
 interface RecipeDetailProps {
-    params: Promise<{ id: string }>;
+    params: { id: string };
 }
 
 const fetchRecipe = cache(async (id: string) => {
@@ -24,7 +25,11 @@ const fetchRecipe = cache(async (id: string) => {
 
 export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
 
+    const idSchema = z.string().uuid();
     const { id } = await params;
+    if (!idSchema.safeParse(id).success) {
+        return notFound();
+    }
     const recipe = await fetchRecipe(id);
 
     if (!recipe) {
