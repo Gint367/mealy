@@ -2,13 +2,13 @@ import { notFound } from 'next/navigation';
 import prisma from '@/prisma/client';
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import ReactMarkdown from 'react-markdown';
-
+import Markdown from 'react-markdown';
+import { cache } from 'react';
 interface RecipeDetailProps {
     params: Promise<{ id: string }>;
 }
 
-const fetchRecipe = async (id: string) => {
+const fetchRecipe = cache(async (id: string) => {
     const recipe = await prisma.recipe.findUnique({
         where: { id },
         include: {
@@ -20,7 +20,7 @@ const fetchRecipe = async (id: string) => {
     });
 
     return recipe;
-};
+});
 
 export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
 
@@ -50,7 +50,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailProps) {
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Cooking Instructions</h2>
 
-                    <ReactMarkdown className={"prose"}>{recipe.description}</ReactMarkdown>
+                    <Markdown >{recipe.description}</Markdown>
 
                 </div>
             </div>
