@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
         <AuthProvider>
           <ThemeProvider
@@ -40,7 +40,7 @@ export default function RootLayout({
           >
 
             <Header />
-            <main className="relative flex min-h-screen flex-col">
+            <main className="p-5">
               {children}
 
             </main>
