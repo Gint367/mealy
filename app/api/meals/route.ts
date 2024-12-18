@@ -50,19 +50,18 @@ export async function POST(req: Request) {
 
         // Normalize the date to the start of the day
         const normalizedDate = new Date(date)
-        normalizedDate.setHours(0, 0, 0, 0)
+        normalizedDate.setHours(1, 0, 0, 0)
 
         // Check if a meal already exists for the user on the specified date
         const existingMeal = await prisma.meal.findFirst({
             where: {
                 userId: session.user.id,
                 date: normalizedDate,
-                recipeId: recipeId
             }
         })
 
         if (existingMeal) {
-            return NextResponse.json({ error: 'Meal already exists for this date' }, { status: 400 })
+            return NextResponse.json({ error: 'Meal already exists for the date' }, { status: 400 })
         }
 
         const newMeal = await prisma.meal.create({
