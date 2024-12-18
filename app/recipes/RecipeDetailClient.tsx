@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-'use client';
+'use client';;
 import { Button } from "@radix-ui/themes";
 import { useState } from "react";
 import { MealAddModal } from "../components/MealAddModal";
@@ -7,7 +7,6 @@ import Markdown from "react-markdown";
 import Image from "next/image";
 import PortionSizeControl from "../components/PortionSizeControl";
 import toast, { Toaster } from 'react-hot-toast';
-
 
 
 interface RecipeDetailClientProps {
@@ -36,6 +35,8 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [portionSize, setPortionSize] = useState<number>(1); // Add portion size state
+
+
 
     const handleAddToCalendar = () => {
         setIsModalOpen(true);
@@ -75,8 +76,12 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
             toast.success('Meal added to calendar!');
             setIsModalOpen(false); // Close modal after successful addition
         } catch (error) {
-            console.error(error);
-            toast.error('Failed to add meal');
+            //console.error(error);
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Failed to add meal');
+            }
         }
     };
 
