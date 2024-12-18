@@ -9,7 +9,7 @@ interface PortionSizeControlProps {
 }
 
 export default function PortionSizeControl({ initialSize, onChange }: PortionSizeControlProps) {
-    const [portionSize, setPortionSize] = useState(initialSize);
+    const [portionSize, setPortionSize] = useState<number>(initialSize);
 
     const handleIncrease = () => {
         const newSize = portionSize + 1;

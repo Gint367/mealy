@@ -15,7 +15,9 @@ interface CalendarEvent {
     portionSize: number
 }
 interface Meal {
+    id: string;
     date: string;
+    portions: number;
     recipe: {
         title: string;
     };
@@ -135,9 +137,12 @@ export function CustomCalendar(): JSX.Element {
                     }
                     const data = await response.json()
                     const calendarEvents = data.map((meal: Meal) => ({
+                        id: meal.id,
                         date: new Date(meal.date),
-                        title: meal.recipe.title
+                        title: meal.recipe.title,
+                        portionSize: meal.portions
                     }))
+                    console.log(calendarEvents)
                     setEvents(calendarEvents)
                 } catch (err) {
                     console.error(err)
@@ -282,15 +287,15 @@ export function CustomCalendar(): JSX.Element {
                                     key={day}
                                     onClick={() => handleDateSelect(date)}
                                     className={cn(
-                                        "p-3 bg-card hover:bg-accent transition-colors relative h-24 text-left",
+                                        "p-3 bg-card hover:bg-accent/5 transition-colors relative h-24 text-left",
                                         "focus:outline-none focus:ring-1 focus:ring-ring ",
-                                        event && "bg-accent/50"
+                                        event && "bg-accent"
                                     )}
                                 >
-                                    <span className="text-sm font-medium text-foreground">{day}</span>
+                                    <span className="text-xs text-muted-foreground">{day}</span>
                                     {event && (
                                         <div className="mt-1">
-                                            <span className="text-xs text-muted-foreground">{event.title}</span>
+                                            <span className="text-sm text-primary">{event.title} x{event.portionSize}</span>
                                         </div>
                                     )}
                                 </button>
