@@ -133,6 +133,7 @@ model Meal {
   userId    String
   recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId  String
+  portions  Int      @default(1)
   date      DateTime // The date of the meal
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

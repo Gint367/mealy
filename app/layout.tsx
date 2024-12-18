@@ -42,6 +42,7 @@ export default function RootLayout({
             <Header />
             <main className="relative flex min-h-screen flex-col">
               {children}
+
             </main>
 
           </ThemeProvider>
