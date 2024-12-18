@@ -20,7 +20,101 @@ interface Meal {
         title: string;
     };
 }
-export function Calendar() {
+/**
+ * Calendar component that displays a monthly calendar view with events.
+ * 
+ * This component fetches meal events for authenticated users and displays them on the calendar.
+ * Users can navigate between months, select dates to view meal details, and update or delete meals.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} The rendered Calendar component.
+ * 
+ * @example
+ * <Calendar />
+ * 
+ * @remarks
+ * - The component uses the `useSession` hook to check the authentication status.
+ * - The `useEffect` hook is used to fetch meals when the user is authenticated.
+ * - The component includes month and year pickers for date navigation.
+ * - Clicking outside the month or year picker closes them.
+ * - The calendar highlights days with events and allows users to select a date to view meal details.
+ * 
+ * @function
+ * @name Calendar
+ * 
+ * @typedef {Object} CalendarEvent
+ * @property {Date} date - The date of the event.
+ * @property {string} title - The title of the event.
+ * 
+ * @typedef {Object} Meal
+ * @property {string} id - The unique identifier of the meal.
+ * @property {Date} date - The date of the meal.
+ * @property {Object} recipe - The recipe details of the meal.
+ * @property {string} recipe.title - The title of the recipe.
+ * 
+ * @hook
+ * @name useSession
+ * @returns {Object} The session status.
+ * 
+ * @hook
+ * @name useState
+ * @param {any} initialState - The initial state value.
+ * @returns {Array} The state and the state updater function.
+ * 
+ * @hook
+ * @name useEffect
+ * @param {Function} effect - The effect function to run.
+ * @param {Array} dependencies - The list of dependencies for the effect.
+ * 
+ * @hook
+ * @name useRef
+ * @param {any} initialValue - The initial value for the ref.
+ * @returns {Object} The ref object.
+ * 
+ * @function
+ * @name handleDateSelect
+ * @param {Date} date - The selected date.
+ * 
+ * @function
+ * @name handleDateChange
+ * @param {number | null} year - The selected year.
+ * @param {number | null} month - The selected month.
+ * 
+ * @function
+ * @name handleMonthSelect
+ * @param {number} month - The selected month.
+ * 
+ * @function
+ * @name handleYearSelect
+ * @param {number} year - The selected year.
+ * 
+ * @function
+ * @name getDaysInMonth
+ * @param {Date} date - The date to get the days in the month for.
+ * @returns {Object} An object containing the number of days in the month and the starting day of the week.
+ * 
+ * @function
+ * @name getEventForDate
+ * @param {Date} date - The date to get the event for.
+ * @returns {CalendarEvent | undefined} The event for the specified date, or undefined if no event exists.
+ * 
+ * @function
+ * @name handleUpdatePortionSize
+ * @param {string} id - The ID of the meal to update.
+ * @param {number} newSize - The new portion size.
+ * 
+ * @function
+ * @name handleDeleteMeal
+ * @param {string} id - The ID of the meal to delete.
+ * 
+ * @function
+ * @name nextMonth
+ * 
+ * @function
+ * @name previousMonth
+ */
+export function CustomCalendar() {
     const { status } = useSession(); // Get the session status
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [isPopupOpen, setIsPopupOpen] = useState(false)
