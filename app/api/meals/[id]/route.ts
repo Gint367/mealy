@@ -30,3 +30,21 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         return NextResponse.json({ error: 'Failed to update meal' }, { status: 500 })
     }
 }
+
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+    const session = await getServerSession(authOptions)
+
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    try {
+        await prisma.meal.delete({
+            where: { id: params.id },
+        })
+
+        return NextResponse.json({ message: 'Meal deleted successfully' })
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to delete meal' }, { status: 500 })
+    }
+}
