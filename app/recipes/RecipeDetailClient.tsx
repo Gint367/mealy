@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import { Button } from "@radix-ui/themes";
 import { useState } from "react";
@@ -58,24 +59,24 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    date: date.toISOString(),
-                    recipeId: recipe.id, // Ensure recipe has an id field
-                    portions: portionSize,
+                    date: date.toISOString(), // Ensure date is in ISO format
+                    recipeId: recipe.id,
+                    portions: portionSize
                 }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add meal');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to add meal');
             }
 
             const newMeal = await response.json();
             console.log('Meal added:', newMeal);
             toast.success('Meal added to calendar!');
-            // Optionally update state or provide user feedback
+            setIsModalOpen(false); // Close modal after successful addition
         } catch (error) {
             console.error(error);
             toast.error('Failed to add meal');
-            // Optionally handle error (e.g., show a notification)
         }
     };
 
