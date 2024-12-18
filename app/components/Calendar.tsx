@@ -114,7 +114,7 @@ interface Meal {
  * @function
  * @name previousMonth
  */
-export function CustomCalendar() {
+export function CustomCalendar(): JSX.Element {
     const { status } = useSession(); // Get the session status
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [isPopupOpen, setIsPopupOpen] = useState(false)
