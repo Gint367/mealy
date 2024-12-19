@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Meal" ADD COLUMN     "portions" INTEGER NOT NULL DEFAULT 1;

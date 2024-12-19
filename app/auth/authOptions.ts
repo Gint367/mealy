@@ -30,13 +30,13 @@ const authOptions: NextAuthOptions = {
                 }
             };
         },
-        async redirect({ url, baseUrl }) {
+        async redirect({ baseUrl }) {
             return baseUrl;
         }
     },
     secret: process.env.NEXTAUTH_SECRET,
     theme: {
-        colorScheme: 'dark',
+        colorScheme: 'auto',
     }
 };
 

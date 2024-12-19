@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/collapsible'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDate, getWeekDates } from '../utils/date'
+import { cn } from '@/lib/utils'
 
 interface Ingredient {
     id: string;
@@ -32,6 +33,7 @@ interface Meal {
     id: string;
     date: Date;
     recipe: Recipe;
+    portions: number; // Added portions field
 }
 
 export default function ShoppingListPage() {
@@ -54,8 +56,12 @@ export default function ShoppingListPage() {
                 }
                 const data: Meal[] = await response.json()
                 setMeals(data)
-            } catch (err: any) {
-                setError(err.message)
+            } catch (err) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('An unknown error occurred');
+                }
             } finally {
                 setLoading(false)
             }
@@ -66,14 +72,14 @@ export default function ShoppingListPage() {
     if (loading) return <Loader2 className="animate-spin" />
     if (error) return <div>Error: {error}</div>
 
-    // Aggregate ingredients directly from fetched meals
+    // Aggregate ingredients directly from fetched meals, considering portions
     const weeklyIngredients = meals.reduce((acc, meal) => {
         meal.recipe.ingredients.forEach((ri) => {
             const key = ri.ingredient.name
             if (!acc[key]) {
                 acc[key] = { amount: 0, unit: ri.unit }
             }
-            acc[key].amount += ri.amount
+            acc[key].amount += ri.amount * meal.portions // Multiply by portions
         })
         return acc
     }, {} as Record<string, { amount: number; unit: string }>)
@@ -121,7 +127,10 @@ export default function ShoppingListPage() {
                             <CollapsibleTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="w-full min-h-[60px] flex flex-col gap-1"
+                                    className={cn(
+                                        "w-full min-h-[60px] flex flex-col gap-1",
+                                        dayMeals.length > 0 ? "bg-accent" : ""
+                                    )}
                                 >
                                     <span>{day}</span>
                                     <span className="text-xs text-muted-foreground">
@@ -136,7 +145,7 @@ export default function ShoppingListPage() {
                                             <ul className="space-y-2">
                                                 {dayMeals.map((meal) => (
                                                     <li key={meal.id}>
-                                                        <h4 className="font-medium">{meal.recipe.title}</h4>
+                                                        <h4 className="font-medium">{meal.recipe.title} x{meal.portions}</h4> {/* Display portions */}
                                                         <ul className="font-small text-muted-foreground">
                                                             {meal.recipe.ingredients.map((ri) => (
                                                                 <li key={ri.ingredient.id}>

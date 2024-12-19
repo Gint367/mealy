@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ModeToggle } from './ModeToggle';
-
+import { Loader2 } from 'lucide-react';
 
 
 export default function Header() {
     const { status, data: session } = useSession();
     return (
-        <nav className="flex items-center justify-between px-6 py-4 border-b bg-background">
+        <div className="flex items-center justify-between px-6 py-4 border-b bg-background">
             <div className="flex items-center space-x-8">
                 <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                     <Link href="/" className="text-lg font-semibold text-foreground">M</Link>
@@ -36,6 +36,11 @@ export default function Header() {
             </div>
             <div className='flex items-center space-x-4'>
                 <ModeToggle />
+                {
+                    status === "loading" && (
+                        <Loader2 /> // Show spinner when loading
+                    )
+                }
                 {
                     status === "authenticated" && (
                         console.log("authenticated"),
@@ -67,6 +72,6 @@ export default function Header() {
                 }
 
             </div>
-        </nav>
+        </div>
     );
 }

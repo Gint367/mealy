@@ -1,32 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 interface PortionSizeControlProps {
     initialSize: number;
+    onChange: (newSize: number) => void;
 }
 
-export default function PortionSizeControl({ initialSize }: PortionSizeControlProps) {
-    const [portionSize, setPortionSize] = useState(initialSize);
+export default function PortionSizeControl({ initialSize, onChange }: PortionSizeControlProps) {
+    const [portionSize, setPortionSize] = useState<number>(initialSize);
 
-    const handleIncrease = () => setPortionSize((prev) => prev + 1);
-    const handleDecrease = () => setPortionSize((prev) => Math.max(1, prev - 1));
+    const handleIncrease = () => {
+        const newSize = portionSize + 1;
+        setPortionSize(newSize);
+        onChange(newSize);
+    };
+    const handleDecrease = () => {
+        const newSize = Math.max(1, portionSize - 1);
+        setPortionSize(newSize);
+        onChange(newSize);
+    };
 
     return (
-        <div className="flex items-center space-x-4">
-            <button
+        <div className="flex items-center space-x-2">
+            <Button
                 onClick={handleDecrease}
-                className="px-4 py-2  rounded-full"
+                variant="outline"
+                className="px-2 py-1"
             >
                 -
-            </button>
-            <span className="text-xl font-semibold">{portionSize}</span>
-            <button
+            </Button>
+            <span className="text-lg font-medium">{portionSize}</span>
+            <Button
                 onClick={handleIncrease}
-                className="px-4 py-2  rounded-full"
+                variant="outline"
+                className="px-2 py-1"
             >
                 +
-            </button>
+            </Button>
         </div>
     );
 }
+

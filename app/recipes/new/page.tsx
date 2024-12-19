@@ -1,5 +1,5 @@
-'use client';;
-import { useCallback, useMemo, useState } from 'react';
+'use client';
+import { useState } from 'react';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,9 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import "easymde/dist/easymde.min.css";
 import dynamic from 'next/dynamic';
-import { SimpleMDEReactProps } from 'react-simplemde-editor';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 const SimpleMdeReact = dynamic(() => import('react-simplemde-editor'), { ssr: false });
@@ -41,7 +39,7 @@ const recipeSchema = z.object({
     ingredients: z.array(
         z.object({
             name: z.string().min(1, 'Ingredient name is required'),
-            amount: z.number().min(0.01, 'Amount must be a positive number'),
+            amount: z.coerce.number().min(0.01, 'Amount must be a positive number'),
             unit: z.enum(UNIT_OPTIONS.map(option => option.value) as [string, ...string[]], {
                 errorMap: () => ({ message: 'Select a valid unit from the list' }),
             }),
@@ -66,39 +64,33 @@ const NewRecipe = () => {
         },
     })
 
-    const [value, setValue] = useState("Start writing your recipe...");
-
-    const onChange = useCallback((value: string) => {
-        setValue(value);
-    }, []);
-
-    const autofocusNoSpellcheckerOptions = useMemo(() => {
+    /* const autofocusNoSpellcheckerOptions = useMemo(() => {
         return {
             autofocus: true,
             spellChecker: false,
         } as SimpleMDEReactProps;
-    }, []);
+    }, []); */
 
     const onSubmit = async (data: RecipeFormValues) => {
         setIsSubmitting(true);
         setError(null);
-        console.log("test")
+
         try {
-            const response = await axios.post('/api/recipes', {
-                ...data,
-                description: value, // Use SimpleMDE value
+            const response = await fetch('/api/recipes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             });
 
-            if (response.status === 201) {
-                router.push('/recipes');
-                router.refresh();
+            if (!response.ok) {
+                throw new Error('Failed to create recipe');
             }
+
+            router.push('/recipes');
         } catch (err) {
-            if (axios.isAxiosError(err)) {
-                setError(err.response?.data?.message || 'Failed to create recipe');
-            } else {
-                setError('An error occurred');
-            }
+            setError((err as Error).message);
         } finally {
             setIsSubmitting(false);
         }
@@ -139,10 +131,8 @@ const NewRecipe = () => {
                             <Controller
                                 name="description"
                                 control={form.control}
-                                defaultValue={value}
                                 render={({ field }) => <SimpleMdeReact placeholder="To cook this I need to..." {...field} />}
-                            >
-                            </Controller>
+                            />
                             <FormMessage className="text-sm text-muted-foreground" />
                         </FormItem>
 
@@ -168,7 +158,7 @@ const NewRecipe = () => {
                                         <FormItem className="w-24">
                                             <FormLabel>Quantity</FormLabel>
                                             <FormControl>
-                                                <Input type="number" step="1" className='bg-background' placeholder="Quantity" {...field} />
+                                                <Input type="number" step="0.5" className='bg-background' placeholder="Quantity" {...field} />
                                             </FormControl>
                                             <FormMessage className="text-sm text-muted-foreground" />
                                         </FormItem>
@@ -190,7 +180,7 @@ const NewRecipe = () => {
                                                     <DropdownMenuContent>
                                                         <DropdownMenuLabel>Select a Unit</DropdownMenuLabel>
                                                         <DropdownMenuSeparator />
-                                                        {UNIT_OPTIONS.map((unit, idx) => (
+                                                        {UNIT_OPTIONS.map((unit) => (
                                                             <DropdownMenuItem
                                                                 key={unit.value}
                                                                 onSelect={() => field.onChange(unit.value)}
