@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     useReactTable,
     getCoreRowModel,
@@ -7,6 +7,7 @@ import {
     getSortedRowModel,
     flexRender,
     createColumnHelper,
+    getFilteredRowModel,
 } from '@tanstack/react-table';
 import { Input } from "@/components/ui/input";
 import Link from 'next/link';
@@ -38,27 +39,20 @@ const columns = [
 
 export default function RecipeSearch({ recipes }: RecipeSearchProps) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredRecipes, setFilteredRecipes] = useState(recipes);
-
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-        setFilteredRecipes(
-            recipes.filter(recipe =>
-                recipe.title.toLowerCase().includes(value.toLowerCase())
-            )
-        );
-    };
 
     const table = useReactTable({
-        data: filteredRecipes,
+        data: recipes,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
         initialState: {
             pagination: { pageIndex: 0, pageSize: 10 },
             sorting: [{ id: 'title', desc: false }],
+        },
+        globalFilterFn: (row, columnId, filterValue) => {
+            return row.original.title.toLowerCase().includes(filterValue.toLowerCase());
         },
     });
 
@@ -68,10 +62,13 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
                 type="text"
                 placeholder="Search recipes..."
                 value={searchTerm}
-                onChange={handleSearch}
+                onChange={e => {
+                    setSearchTerm(e.target.value);
+                    table.setGlobalFilter(e.target.value);
+                }}
                 className="mb-4 border border-primary/50 bg-primary-foreground text-primary"
             />
-            {filteredRecipes.length > 0 ? (
+            {table.getRowModel().rows.length > 0 ? (
                 <div>
                     <Table className="min-w-full">
                         <TableHeader>
