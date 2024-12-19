@@ -10,6 +10,8 @@ import {
 } from '@tanstack/react-table';
 import { Input } from "@/components/ui/input";
 import Link from 'next/link';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { Button } from '@/components/ui/button';
 
 interface Recipe {
     id: string;
@@ -71,12 +73,12 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
             />
             {filteredRecipes.length > 0 ? (
                 <div>
-                    <table className="min-w-full">
-                        <thead>
+                    <Table className="min-w-full">
+                        <TableHeader>
                             {table.getHeaderGroups().map(headerGroup => (
-                                <tr key={headerGroup.id}>
+                                <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map(header => (
-                                        <th
+                                        <TableHead
                                             key={header.id}
                                             colSpan={header.colSpan}
                                             className="flex items-center px-6 border-b text-left text-xs font-medium text-muted-foreground uppercase tracking-wider"
@@ -90,40 +92,40 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
                                                     <svg xmlns="http://www.w3.org/2000/svg" height="12" viewBox="0 96 960 960" width="12" style={{ transform: 'rotate(180deg)' }}><path d="M480 936 240 696l56-56 144 144V256h80v528l144-144 56 56-240 240Z" /></svg>
                                                 )
                                             ) : ''}
-                                        </th>
+                                        </TableHead>
                                     ))}
-                                </tr>
+                                </TableRow>
                             ))}
-                        </thead>
-                        <tbody className="bg-background ">
+                        </TableHeader>
+                        <TableBody className="bg-background ">
                             {table.getRowModel().rows.map(row => (
-                                <tr key={row.id}>
+                                <TableRow key={row.id}>
                                     {row.getVisibleCells().map(cell => (
-                                        <td
+                                        <TableCell
                                             key={cell.id}
                                             className="px-6 py-2 whitespace-nowrap text-primary"
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
+                                        </TableCell>
                                     ))}
-                                </tr>
+                                </TableRow>
                             ))}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                     <div className="flex items-center justify-between mt-4">
                         <div className="flex items-center space-x-2">
-                            <button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} className="px-2 py-1 border rounded disabled:opacity-50">
+                            <Button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} className="px-2 py-1 border rounded disabled:opacity-50">
                                 {'<<'}
-                            </button>
-                            <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="px-2 py-1 border rounded disabled:opacity-50">
+                            </Button>
+                            <Button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="px-2 py-1 border rounded disabled:opacity-50">
                                 {'<'}
-                            </button>
-                            <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="px-2 py-1 border rounded disabled:opacity-50">
+                            </Button>
+                            <Button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="px-2 py-1 border rounded disabled:opacity-50">
                                 {'>'}
-                            </button>
-                            <button onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()} className="px-2 py-1 border rounded disabled:opacity-50">
+                            </Button>
+                            <Button onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()} className="px-2 py-1 border rounded disabled:opacity-50">
                                 {'>>'}
-                            </button>
+                            </Button>
                         </div>
                         <span className="text-sm">
                             Page{' '}
