@@ -81,7 +81,7 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
                                         <TableHead
                                             key={header.id}
                                             colSpan={header.colSpan}
-                                            className="flex items-center px-6 border-b text-left text-xs font-medium text-muted-foreground uppercase tracking-wider"
+                                            className="flex items-center px-6 pb-2 border-b text-left text-xs font-medium text-muted-foreground uppercase tracking-wider"
                                             onClick={header.column.getToggleSortingHandler()}
                                         >
                                             {flexRender(header.column.columnDef.header, header.getContext())}
