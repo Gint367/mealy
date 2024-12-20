@@ -158,7 +158,7 @@ const NewRecipe = () => {
                                         <FormItem className="w-24">
                                             <FormLabel>Quantity</FormLabel>
                                             <FormControl>
-                                                <Input type="number" step="0.5" className='bg-background' placeholder="Quantity" {...field} />
+                                                <Input type="number" step="0.5" className='bg-background' placeholder="Quantity" {...field} inputMode='decimal' />
                                             </FormControl>
                                             <FormMessage className="text-sm text-muted-foreground" />
                                         </FormItem>
