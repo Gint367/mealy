@@ -19,6 +19,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Mealy, your meal planner",
   description: "Mealy is a meal planner that helps you plan your meals for the week.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
@@ -41,6 +47,7 @@ export default function RootLayout({
 
             <Header />
             <main className="p-5">
+
               {children}
 
             </main>
