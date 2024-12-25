@@ -7,6 +7,7 @@ import Markdown from "react-markdown";
 import Image from "next/image";
 import PortionSizeControl from "../components/PortionSizeControl";
 import toast, { Toaster } from 'react-hot-toast';
+import remarkGfm from 'remark-gfm';
 
 
 interface RecipeDetailClientProps {
@@ -103,7 +104,7 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
 
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Cooking Instructions</h2>
-                    <Markdown>{recipe.description}</Markdown>
+                    <Markdown className={'prose'} remarkPlugins={[remarkGfm]}>{recipe.description}</Markdown>
                 </div>
             </div>
 

@@ -10,6 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ModeToggle } from './ModeToggle';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 
 export default function Header() {
@@ -19,7 +20,7 @@ export default function Header() {
             <div className="flex items-center space-x-8">
                 <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                     <Link href="/" className="text-lg font-semibold text-foreground">
-                        <img src='/mealy.webp' alt="logo" className="w-full h-full object-cover" width={16} height={16} />
+                        <Image src='/mealy.webp' alt="logo" className="w-full h-full object-cover" width={16} height={16} />
                     </Link>
 
                 </div>
