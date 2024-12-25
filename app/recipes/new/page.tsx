@@ -60,7 +60,7 @@ const NewRecipe = () => {
         defaultValues: {
             title: '',
             description: '',
-            ingredients: [{ name: '', amount: 0, unit: 'grams' }],
+            ingredients: [{ name: '', amount: 1, unit: 'grams' }],
         },
     })
 
@@ -210,7 +210,7 @@ const NewRecipe = () => {
                             type="button"
                             variant="outline"
                             onClick={() => {
-                                form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 0, unit: 'grams' }]);
+                                form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 1, unit: 'grams' }]);
                                 setTimeout(() => {
                                     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                                 }, 0);
