@@ -209,7 +209,12 @@ const NewRecipe = () => {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 0, unit: 'grams' }])}
+                            onClick={() => {
+                                form.setValue('ingredients', [...form.watch('ingredients'), { name: '', amount: 0, unit: 'grams' }]);
+                                setTimeout(() => {
+                                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                                }, 0);
+                            }}
                         >
                             Add Ingredient
                         </Button>
