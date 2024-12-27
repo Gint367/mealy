@@ -11,6 +11,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card'
 import { formatDate, getWeekDates } from '../utils/date'
 import { cn } from '@/lib/utils'
+import ShoppinglistSkeleton from './loading'
 
 interface Ingredient {
     id: string;
@@ -55,6 +56,7 @@ export default function ShoppingListPage() {
                     throw new Error('Failed to fetch meals')
                 }
                 const data: Meal[] = await response.json()
+                //await delay(2000)
                 setMeals(data)
             } catch (err) {
                 if (err instanceof Error) {
@@ -69,7 +71,7 @@ export default function ShoppingListPage() {
         fetchMeals()
     }, [weekOffset, startDate, endDate])
 
-    if (loading) return <Loader2 className="animate-spin justify-center items-center" />
+    if (loading) return <ShoppinglistSkeleton />
     if (error) return <div>Error: {error}</div>
 
     // Aggregate ingredients directly from fetched meals, considering portions
@@ -95,7 +97,7 @@ export default function ShoppingListPage() {
     const dayNames = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
     return (
-        <div className="container mx-auto p-4 max-w-3xl">
+        <div className="container mx-auto max-w-3xl">
             <div className="flex items-center justify-center gap-4 mb-6">
                 <Button
                     variant="outline"

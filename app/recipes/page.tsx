@@ -5,6 +5,7 @@ import prisma from "@/prisma/client";
 
 
 export default async function RecipesPage() {
+    //await delay(2000)
     const recipes = await prisma.recipe.findMany({
         orderBy: {
             title: 'asc'
