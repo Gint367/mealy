@@ -153,7 +153,7 @@ const NewRecipe = () => {
                         />
 
                         <FormItem className='flex flex-col'>
-                            <FormLabel>Cooking Instruction</FormLabel>
+                            <FormLabel className='pb-1'>Cooking Instruction</FormLabel>
                             <Controller
                                 name="description"
                                 control={form.control}
@@ -224,7 +224,7 @@ const NewRecipe = () => {
                                 <Button
                                     type="button"
                                     variant="destructive"
-                                    className="self-center"
+                                    className="self-center justtify-center mt-3"
                                     onClick={() => onDeleteIngredient(index)}
                                 >
                                     Delete

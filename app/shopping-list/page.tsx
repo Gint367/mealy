@@ -129,7 +129,7 @@ export default function ShoppingListPage() {
                                     variant="outline"
                                     className={cn(
                                         "w-full min-h-[60px] flex flex-col gap-1",
-                                        dayMeals.length > 0 ? "bg-accent" : ""
+                                        dayMeals.length > 0 ? "bg-primary hover:bg-primary/80" : ""
                                     )}
                                 >
                                     <span>{day}</span>
@@ -175,7 +175,7 @@ export default function ShoppingListPage() {
                             {Object.entries(weeklyIngredients).map(([name, { amount, unit }]) => (
                                 <li key={name} className="flex items-center gap-2">
                                     <span>•</span>
-                                    <span>{name}</span>
+                                    <span className='text-wrap truncate'>{name.length > 20 ? `${name.substring(0, 30)}...` : name}</span>
                                     <span className="text-muted-foreground">
                                         [{amount} {unit}]
                                     </span>

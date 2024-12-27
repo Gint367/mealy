@@ -7,8 +7,8 @@ import Link from 'next/link'
 function RecipeActions() {
     return (
         <Flex className="mb-2" justify={"between"}>
-            <Button variant="outline" size="sm">
-                <Plus className="h-4 w-4 mr-2" />
+            <Button variant="default" size="sm">
+                <Plus className="h-4 w-4 mr-1" />
                 <Link href={'/recipes/new'}>
                     Create new Recipe
                 </Link>

@@ -66,7 +66,7 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
                     setSearchTerm(e.target.value);
                     table.setGlobalFilter(e.target.value);
                 }}
-                className="mb-4 border border-primary/50 bg-primary-foreground text-primary"
+                className="mb-4 border focus:ring-primary focus:outline-none"
             />
             {table.getRowModel().rows.length > 0 ? (
                 <div>
@@ -78,7 +78,7 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
                                         <TableHead
                                             key={header.id}
                                             colSpan={header.colSpan}
-                                            className="flex items-center px-6 pb-2 border-b text-left text-xs font-medium text-muted-foreground uppercase tracking-wider"
+                                            className="flex items-center px-6 pb-2 border-b text-left text-xs font-medium text-muted-foreground uppercase"
                                             onClick={header.column.getToggleSortingHandler()}
                                         >
                                             {flexRender(header.column.columnDef.header, header.getContext())}
@@ -94,13 +94,13 @@ export default function RecipeSearch({ recipes }: RecipeSearchProps) {
                                 </TableRow>
                             ))}
                         </TableHeader>
-                        <TableBody className="bg-background ">
+                        <TableBody className=" ">
                             {table.getRowModel().rows.map(row => (
                                 <TableRow key={row.id}>
                                     {row.getVisibleCells().map(cell => (
                                         <TableCell
                                             key={cell.id}
-                                            className="px-6 py-2 whitespace-nowrap text-primary"
+                                            className="px-6 py-2 whitespace-nowrap text-nowrap"
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>

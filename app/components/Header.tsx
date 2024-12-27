@@ -16,28 +16,28 @@ import Image from 'next/image';
 export default function Header() {
     const { status, data: session } = useSession();
     return (
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-background h-16">
+        <div className="flex items-center justify-between px-6 py-4 border-b">
             <div className="flex items-center space-x-8">
                 <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                    <Link href="/" className="text-lg font-semibold text-foreground">
-                        <Image src='/mealy.webp' alt="logo" className="w-full h-full object-cover" width={16} height={16} />
+                    <Link href="/">
+                        <Image src='/mealy.webp' alt="logo" className="w-full h-full object-cover" width={48} height={48} />
                     </Link>
 
                 </div>
 
-                <nav className="flex space-x-3">
-                    <Link href="/" className="px-4 py-2 font-bold bg-accent hover:bg-accent rounded-xl text-foreground ">
+                <nav className="flex space-x-3 max-md:text-sm">
+                    <Link href="/" className="px-4 py-2 font-bold bg-accent hover:bg-accent/50 rounded-xl max-h-10 ">
                         Calendar
                     </Link>
-                    <Link href="/recipes" className="px-4 py-2 font-bold bg-accent hover:bg-accent rounded-xl text-foreground">
+                    <Link href="/recipes" className="px-4 py-2 font-bold bg-accent hover:bg-accent/50 rounded-xl max-h-10">
                         Recipes
                     </Link>
-                    <Link href="/shopping-list" className="px-4 py-2 font-bold bg-accent hover:bg-accent rounded-xl text-foreground">
+                    <Link href="/shopping-list" className="px-4 py-2 font-bold bg-accent hover:bg-accent/50 rounded-xl max-h-10 text-nowrap">
                         Shopping List
                     </Link>
                 </nav>
             </div>
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-4 pl-2'>
                 <ModeToggle />
                 {
                     status === "loading" && (
@@ -62,7 +62,7 @@ export default function Header() {
                                     <Link className='block w-full' href="/profilepage">View Profile</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Link className='block w-full' href="/api/auth/signout">Log Out</Link>
+                                    <Link className='block w-full text-destructive' href="/api/auth/signout">Log Out</Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

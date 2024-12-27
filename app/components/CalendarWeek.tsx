@@ -48,7 +48,7 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ currentMonth, handleDateSelect,
                     <ChevronRight className="h-4 w-4" />
                 </Button>
             </div>
-            <div className="grid lg:grid-cols-7 gap-px bg-muted sm:grid-cols-1 ">
+            <div className="grid lg:grid-cols-7 gap-px bg-muted sm:grid-cols-1 md:grid-cols-7 ">
                 {weekDays.map((date, index) => {
                     const event = getEventForDate(date);
                     return (
@@ -56,15 +56,15 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ currentMonth, handleDateSelect,
                             key={index}
                             onClick={() => handleDateSelect(date)}
                             className={cn(
-                                "p-3 bg-card hover:bg-accent/5 transition-colors relative h-24 text-left",
-                                "focus:outline-none focus:ring-1 focus:ring-ring ",
-                                event && "bg-accent"
+                                "p-3 bg-card transition-colors relative h-24 text-left",
+                                "focus:outline-none focus:ring-1 focus:ring-ring",
+                                event && "bg-primary hover:bg-primary/80"
                             )}
                         >
                             <span className="absolute top-2 left-2 text-xs text-muted-foreground">{date.toLocaleDateString('default', { weekday: 'short', day: 'numeric' })}</span>
                             {event && (
-                                <div className="mt-1">
-                                    <span className="text-sm text-primary">{event.title} x{event.portionSize}</span>
+                                <div className="mt-2">
+                                    <span className="text-sm ">{event.title} x{event.portionSize}</span>
                                 </div>
                             )}
                         </button>

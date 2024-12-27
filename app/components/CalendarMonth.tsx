@@ -15,7 +15,7 @@ const MonthlyView: React.FC<MonthlyViewProps> = ({ days, weekDays, startingDay, 
     return (
         <div className="grid grid-cols-7 gap-px bg-muted">
             {weekDays.map((day) => (
-                <div key={day} className="p-3 text-center text-sm font-medium text-foreground bg-background">
+                <div key={day} className="p-3 text-center text-sm font-medium bg-background">
                     {day}
                 </div>
             ))}
@@ -30,15 +30,15 @@ const MonthlyView: React.FC<MonthlyViewProps> = ({ days, weekDays, startingDay, 
                         key={day}
                         onClick={() => handleDateSelect(date)}
                         className={cn(
-                            "p-3 bg-card hover:bg-accent/5 transition-colors relative h-24 text-left",
-                            "focus:outline-none focus:ring-1 focus:ring-ring",
-                            event && "bg-accent"
+                            "p-3 bg-card transition-colors relative h-24 text-left",
+
+                            event && "bg-primary hover:bg-primary/80 focus:outline-none focus:ring-1 focus:ring-ring"
                         )}
                     >
                         <span className="text-xs text-muted-foreground">{day}</span>
                         {event && (
                             <div className="mt-1">
-                                <span className="text-sm text-primary">{event.title} x{event.portionSize}</span>
+                                <span className="text-sm truncate">{event.title} x{event.portionSize}</span>
                             </div>
                         )}
                     </button>

@@ -21,7 +21,7 @@ const Page = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <Card className="max-w-2xl mx-auto">
                 <CardHeader className="text-center">
                     <div className="flex justify-center mb-4">
@@ -72,7 +72,7 @@ const Page = () => {
                                 <PenSquare className="w-4 h-4 mr-2" />
                                 Update Profile
                             </Button>
-                            <Button variant="outline" className="w-full text-red-600 hover:text-red-700 hover:bg-red-50">
+                            <Button variant="outline" className="w-full text-destructive">
                                 <LogOut className="w-4 h-4 mr-2" />
                                 <Link href="/api/auth/signout">
                                     Logout
