@@ -69,7 +69,7 @@ export default function ShoppingListPage() {
         fetchMeals()
     }, [weekOffset, startDate, endDate])
 
-    if (loading) return <Loader2 className="animate-spin" />
+    if (loading) return <Loader2 className="animate-spin justify-center items-center" />
     if (error) return <div>Error: {error}</div>
 
     // Aggregate ingredients directly from fetched meals, considering portions
