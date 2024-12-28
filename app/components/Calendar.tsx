@@ -148,39 +148,39 @@ export function CustomCalendar(): JSX.Element {
     const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     return (
-        <div className="relative mx-auto p-4 w-full">
+        <div>
             <div className="flex justify-end mb-4">
                 <span className="mr-2">Monthly View</span>
                 <Switch checked={!isMonthlyView} onCheckedChange={toggleView} />
                 <span className="ml-2">Weekly View</span>
             </div>
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                <div className="p-6">
-                    <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="p-4 md:p-6">
+                    <div className="flex items-center justify-center gap-2 md:gap-4 mb-4">
                         {isMonthlyView && (
-                            <Button className='items-center' variant="ghost" onClick={previousMonth}>
-                                <ChevronLeft className="h-4 w-4" />
-                                Previous Month
+                            <Button className='flex items-center' variant="ghost" onClick={previousMonth}>
+                                <ChevronLeft className="h-4 w-4 md:h-6 md:w-6" />
+                                <span className="hidden md:inline">Previous Month</span>
                             </Button>
                         )}
                         <div className="flex gap-2">
                             <h2
-                                className="text-xl font-semibold text-foreground cursor-pointer"
+                                className="text-lg md:text-xl font-semibold text-foreground cursor-pointer"
                                 onClick={() => setIsMonthPickerOpen(!isMonthPickerOpen)}
                             >
                                 {currentMonth.toLocaleString('default', { month: 'long' })}
                             </h2>
                             <h2
-                                className="text-xl font-semibold text-foreground cursor-pointer"
+                                className="text-lg md:text-xl font-semibold text-foreground cursor-pointer"
                                 onClick={() => setIsYearPickerOpen(!isYearPickerOpen)}
                             >
                                 {currentMonth.getFullYear()}
                             </h2>
                         </div>
                         {isMonthlyView && (
-                            <Button className='items-center' variant="ghost" onClick={nextMonth}>
-                                Next Month
-                                <ChevronRight className="h-4 w-4" />
+                            <Button className='flex items-center' variant="ghost" onClick={nextMonth}>
+                                <span className="hidden md:inline">Next Month</span>
+                                <ChevronRight className="h-4 w-4 md:h-6 md:w-6" />
                             </Button>
                         )}
                     </div>

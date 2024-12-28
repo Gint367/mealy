@@ -85,7 +85,7 @@ export function MealEditPopup({ isOpen, onClose, meal, onDelete, onUpdatePortion
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
-                <DialogContent>
+                <DialogContent className="max-w-lg w-full">
                     <DialogHeader>
                         <DialogTitle>Edit Meal: {meal.title}</DialogTitle>
                     </DialogHeader>
@@ -96,12 +96,12 @@ export function MealEditPopup({ isOpen, onClose, meal, onDelete, onUpdatePortion
                             onChange={setNewPortionSize}
                         />
                     </div>
-                    <DialogFooter className="sm:justify-between">
-                        <Button variant="destructive" onClick={handleDelete}>
+                    <DialogFooter className="flex flex-col sm:flex-row sm:justify-between">
+                        <Button variant="destructive" onClick={handleDelete} className="mb-2 sm:mb-0">
                             Delete Meal
                         </Button>
-                        <div>
-                            <Button variant="outline" onClick={onClose} className="mr-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center">
+                            <Button variant="outline" onClick={onClose} className="mb-2 sm:mb-0 sm:mr-2">
                                 Cancel
                             </Button>
                             <Button onClick={handleApplyChanges}>

@@ -87,7 +87,7 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
     };
 
     return (
-        <div className="container mx-auto p-4 pb-24 flex flex-col">
+        <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-6">{recipe.title}</h1>
 
             <div className="grid md:grid-cols-2 gap-8 ">
@@ -121,13 +121,13 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
                 </div>
             )}
 
-            <div className="container bg-background border-t p-4 flex items-center justify-between w-full bottom-0">
-                <div className="flex items-center space-x-4">
+            <div className="container bg-background border-t p-4 flex flex-col sm:flex-row items-center justify-between w-full bottom-0">
+                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
                     <span className="text-lg font-semibold">Portion Size:</span>
                     <PortionSizeControl initialSize={portionSize} onChange={handlePortionChange} />
                 </div>
                 <Button
-                    className="ml-4 text-primary-foreground bg-primary px-4 py-2 rounded hover:bg-primary/80 focus:outline-none focus:ring-2 focus:bg-primary/80 focus:ring-opacity-50"
+                    className="mt-4 sm:mt-0 text-primary-foreground bg-primary px-4 py-2 rounded hover:bg-primary/80 focus:outline-none focus:ring-2 focus:bg-primary/80 focus:ring-opacity-50"
                     onClick={handleAddToCalendar}>
                     Add to Calendar
                 </Button>
