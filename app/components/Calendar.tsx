@@ -148,14 +148,14 @@ export function CustomCalendar(): JSX.Element {
     const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     return (
-        <div>
-            <div className="flex justify-end mb-4">
-                <span className="mr-2">Monthly View</span>
-                <Switch checked={!isMonthlyView} onCheckedChange={toggleView} />
-                <span className="ml-2">Weekly View</span>
-            </div>
+        <div className='container justify-center'>
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                <div className="p-4 md:p-6">
+                <div className="flex m-2 justify-end items-center">
+                    <span className="mr-2 font-medium">Monthly View</span>
+                    <Switch checked={!isMonthlyView} onCheckedChange={toggleView} />
+                    <span className="ml-2 font-medium">Weekly View</span>
+                </div>
+                <div className="p-1 md:px-3 md:py-2">
                     <div className="flex items-center justify-center gap-2 md:gap-4 mb-4">
                         {isMonthlyView && (
                             <Button className='flex items-center' variant="ghost" onClick={previousMonth}>

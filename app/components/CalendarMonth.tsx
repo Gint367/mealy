@@ -13,24 +13,24 @@ interface MonthlyViewProps {
 
 const MonthlyView: React.FC<MonthlyViewProps> = ({ days, weekDays, startingDay, handleDateSelect, getEventForDate, currentMonth }) => {
     return (
-        <div className="grid grid-cols-7 gap-1 sm:gap-2">
+        <div className="grid grid-cols-7 gap-0.5 sm:gap-0 bg-muted/50">
             {weekDays.map((day) => (
-                <div key={day} className="p-3 text-center text-sm font-medium bg-background">
+                <div key={day} className="p-3 items-center text-center text-sm font-medium bg-background">
                     {day}
                 </div>
             ))}
             {Array.from({ length: startingDay }).map((_, index) => (
-                <div key={`empty-${index}`} className="p-3 bg-muted/50" />
+                <div key={`empty-${index}`} className="" />
             ))}
             {days.map((day) => {
                 const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
                 const event = getEventForDate(date);
                 return (
-                    <button
+                    <div
                         key={day}
                         onClick={() => handleDateSelect(date)}
                         className={cn(
-                            "p-2 sm:p-3 bg-card transition-colors relative h-20 sm:h-24 text-left",
+                            "p-1 sm:p-3 bg-card transition-colors relative h-20 sm:h-24 text-left",
 
                             event && "bg-primary hover:bg-primary/80 focus:outline-none focus:ring-1 focus:ring-ring"
                         )}
@@ -38,10 +38,10 @@ const MonthlyView: React.FC<MonthlyViewProps> = ({ days, weekDays, startingDay, 
                         <span className="text-xs sm:text-sm text-muted-foreground">{day}</span>
                         {event && (
                             <div className="mt-1">
-                                <span className="text-xs sm:text-sm truncate hidden sm:inline">{event.title}x{event.portionSize}</span>
+                                <span className="text-xs sm:text-sm truncate hidden sm:inline font-semibold">{event.title}x{event.portionSize}</span>
                             </div>
                         )}
-                    </button>
+                    </div>
                 );
             })}
         </div>
