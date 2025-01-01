@@ -46,7 +46,7 @@ export default function RootLayout({
           >
 
             <Header />
-            <main className="p-5">
+            <main className="container mx-auto p-5">
 
               {children}
 

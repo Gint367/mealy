@@ -16,7 +16,7 @@ import Image from 'next/image';
 export default function Header() {
     const { status, data: session } = useSession();
     return (
-        <nav className="container flex items-center justify-between px-4 py-2 border-b md:px-6 md:py-4">
+        <nav className="container mx-auto flex items-center justify-between px-4 py-2 border-b md:px-6 md:py-4">
             <div className="flex items-center space-x-4 md:space-x-8">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-muted flex items-center justify-center">
                     <Link href="/">
