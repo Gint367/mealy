@@ -15,6 +15,7 @@ import Image from 'next/image';
 
 export default function Header() {
     const { status, data: session } = useSession();
+
     return (
         <nav className="container mx-auto flex items-center justify-between px-4 py-2 border-b md:px-6 md:py-4">
             <div className="flex items-center space-x-4 md:space-x-8">
@@ -38,7 +39,9 @@ export default function Header() {
                 </div>
             </div>
             <div className="flex items-center space-x-4 max-md:space-x-1 pl-1">
-                <ModeToggle />
+                <div className="hidden sm:flex">
+                    <ModeToggle />
+                </div>
                 {
                     status === "loading" && (
                         <Loader2 className="animate-spin" /> // Show spinner when loading
@@ -49,20 +52,23 @@ export default function Header() {
                         //console.log("authenticated"),
                         <DropdownMenu>
                             <DropdownMenuTrigger>
-                                <Avatar>
+                                <Avatar className="cursor-pointer">
                                     <AvatarImage src={session?.user?.image || "P"} />
                                     <AvatarFallback>Me</AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuLabel className="text-foreground">
-                                    {session?.user?.email || ""}
+                                    {session?.user?.name || ""}
                                 </DropdownMenuLabel>
                                 <DropdownMenuItem>
                                     <Link className='block w-full' href="/profilepage">View Profile</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
                                     <Link className='block w-full text-destructive' href="/api/auth/signout">Log Out</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="flex sm:hidden" disabled>
+                                    <ModeToggle />
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

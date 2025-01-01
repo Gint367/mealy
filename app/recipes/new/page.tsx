@@ -66,7 +66,6 @@ const recipeSchema = z.object({
         .min(1, 'At least one ingredient is required')
         .refine((ingredients) => {
             const names = ingredients.map(ing => ing.name.toLowerCase());
-            console.log("duplicate ingredients detected")
             return names.length === new Set(names).size;
         }, { message: 'Ingredient names must be unique' }),
 });
@@ -153,7 +152,7 @@ const NewRecipe = () => {
                         />
 
                         <FormItem className='flex flex-col'>
-                            <FormLabel className='pb-1'>Cooking Instruction</FormLabel>
+                            <FormLabel>Cooking Instruction</FormLabel>
                             <Controller
                                 name="description"
                                 control={form.control}
@@ -224,7 +223,7 @@ const NewRecipe = () => {
                                 <Button
                                     type="button"
                                     variant="destructive"
-                                    className="self-center justtify-center mt-3"
+                                    className="self-center"
                                     onClick={() => onDeleteIngredient(index)}
                                 >
                                     Delete

@@ -10,10 +10,20 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useEffect, useState } from "react"
 
 export function ModeToggle() {
-    const { setTheme } = useTheme()
+    const [mounted, setMounted] = useState(false)
+    const { theme, setTheme } = useTheme()
 
+    // useEffect only runs on the client, so now we can safely show the UI
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    if (!mounted) {
+        return null
+    }
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
