@@ -12,7 +12,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 const SimpleMdeReact = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
 const UNIT_OPTIONS = [
@@ -66,7 +66,12 @@ const recipeSchema = z.object({
         .min(1, 'At least one ingredient is required')
         .refine((ingredients) => {
             const names = ingredients.map(ing => ing.name.toLowerCase());
-            return names.length === new Set(names).size;
+            if (names.length !== new Set(names).size) {
+                toast.error("Duplicate ingredients detected!");
+                console.log("Duplicate ingredients detected!");
+                return false;
+            }
+            return true;
         }, { message: 'Ingredient names must be unique' }),
 });
 type RecipeFormValues = z.infer<typeof recipeSchema>
@@ -127,6 +132,7 @@ const NewRecipe = () => {
 
     return (
         <div className="container mx-auto p-4">
+            <Toaster />
             <h1 className="text-2xl font-bold mb-4">Create New Recipe</h1>
             <div className='max-w-xl space-y-3'>
                 {error && (
