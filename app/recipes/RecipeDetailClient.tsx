@@ -104,7 +104,7 @@ export default function RecipeDetailClient({ recipe }: RecipeDetailClientProps) 
 
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Cooking Instructions</h2>
-                    <Markdown className={'prose'} remarkPlugins={[remarkGfm]}>{recipe.description}</Markdown>
+                    <Markdown className={'prose dark:prose-invert'} remarkPlugins={[remarkGfm]}>{recipe.description}</Markdown>
                 </div>
             </div>
 

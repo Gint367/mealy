@@ -1,7 +1,7 @@
 'use client';;
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import PortionSizeControl from "./PortionSizeControl";
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -88,6 +88,9 @@ export function MealEditPopup({ isOpen, onClose, meal, onDelete, onUpdatePortion
                 <DialogContent className="max-w-lg w-full">
                     <DialogHeader>
                         <DialogTitle>Edit Meal: {meal.title}</DialogTitle>
+                        <DialogDescription id="meal-edit-description">
+                            Adjust the portion size or remove this meal.
+                        </DialogDescription>
                     </DialogHeader>
                     <div className="py-4">
                         <h4 className="mb-2 text-sm font-medium">Portion Size:</h4>

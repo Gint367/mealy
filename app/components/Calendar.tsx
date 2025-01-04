@@ -54,7 +54,7 @@ export function CustomCalendar(): JSX.Element {
                         title: meal.recipe.title,
                         portionSize: meal.portions
                     }))
-                    console.log(calendarEvents)
+                    //console.log(calendarEvents)
                     setEvents(calendarEvents)
                 } catch (err) {
                     console.error(err)

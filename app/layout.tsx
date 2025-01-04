@@ -5,16 +5,6 @@ import Header from "./components/Header";
 import AuthProvider from "./auth/Provider";
 import { ThemeProvider } from "next-themes";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Mealy, your meal planner",
@@ -35,7 +25,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
+        className={`antialiased bg-background`}
       >
         <AuthProvider>
           <ThemeProvider

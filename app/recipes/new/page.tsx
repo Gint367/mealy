@@ -68,7 +68,7 @@ const recipeSchema = z.object({
             const names = ingredients.map(ing => ing.name.toLowerCase());
             if (names.length !== new Set(names).size) {
                 toast.error("Duplicate ingredients detected!");
-                console.log("Duplicate ingredients detected!");
+                //console.log("Duplicate ingredients detected!");
                 return false;
             }
             return true;
@@ -150,7 +150,7 @@ const NewRecipe = () => {
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
-                                        <Input className='bg-background' placeholder="Recipe title" {...field} />
+                                        <Input className='' placeholder="Recipe title" {...field} />
                                     </FormControl>
                                     <FormMessage className="text-sm text-muted-foreground" />
                                 </FormItem>
@@ -173,10 +173,10 @@ const NewRecipe = () => {
                                     control={form.control}
                                     name={`ingredients.${index}.name`}
                                     render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Ingredient {index + 1}</FormLabel>
+                                        <FormItem className="flex-1 w-full min-w-32">
+                                            <FormLabel className='truncate'>Ingredient {index + 1}</FormLabel>
                                             <FormControl>
-                                                <Input className='bg-background' placeholder="Ingredient name" {...field} />
+                                                <Input className='' placeholder="Ingredient name" {...field} />
                                             </FormControl>
                                             <FormMessage className="text-sm text-muted-foreground" />
                                         </FormItem>
@@ -189,51 +189,54 @@ const NewRecipe = () => {
                                         <FormItem className="w-24">
                                             <FormLabel>Quantity</FormLabel>
                                             <FormControl>
-                                                <Input type="number" step="0.5" className='bg-background' placeholder="Quantity" {...field} inputMode='decimal' />
+                                                <Input type="number" step="0.5" className='' placeholder="Quantity" {...field} inputMode='decimal' />
                                             </FormControl>
                                             <FormMessage className="text-sm text-muted-foreground" />
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name={`ingredients.${index}.unit`}
-                                    render={({ field }) => (
-                                        <FormItem className="w-40">
-                                            <FormLabel>Unit</FormLabel>
-                                            <FormControl>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger className="bg-background w-full text-left p-2 border rounded">
-                                                        {field.value
-                                                            ? UNIT_OPTIONS.find((unit) => unit.value === field.value)?.label
-                                                            : 'Select unit'}
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent>
-                                                        <DropdownMenuLabel>Select a Unit</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator />
-                                                        {UNIT_OPTIONS.map((unit) => (
-                                                            <DropdownMenuItem
-                                                                key={unit.value}
-                                                                onSelect={() => field.onChange(unit.value)}
-                                                            >
-                                                                {unit.label}
-                                                            </DropdownMenuItem>
-                                                        ))}
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </FormControl>
-                                            <FormMessage className="text-sm text-muted-foreground" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button
-                                    type="button"
-                                    variant="destructive"
-                                    className="self-center"
-                                    onClick={() => onDeleteIngredient(index)}
-                                >
-                                    Delete
-                                </Button>
+                                <div className="flex items-center gap-2">
+                                    <FormField
+                                        control={form.control}
+                                        name={`ingredients.${index}.unit`}
+                                        render={({ field }) => (
+                                            <FormItem className="">
+                                                <FormLabel>Unit</FormLabel>
+                                                <FormControl>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger className="flex text-left px-4 py-2 md:w-full border rounded">
+                                                            {field.value
+                                                                ? UNIT_OPTIONS.find((unit) => unit.value === field.value)?.label
+                                                                : 'Select unit'}
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuLabel>Select a Unit</DropdownMenuLabel>
+                                                            <DropdownMenuSeparator />
+                                                            {UNIT_OPTIONS.map((unit) => (
+                                                                <DropdownMenuItem
+                                                                    key={unit.value}
+                                                                    onSelect={() => field.onChange(unit.value)}
+                                                                >
+                                                                    {unit.label}
+                                                                </DropdownMenuItem>
+                                                            ))}
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </FormControl>
+                                                <FormMessage className="text-sm text-muted-foreground" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        className="self-end mb-1"
+                                        onClick={() => onDeleteIngredient(index)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
+
                             </div>
                         ))}
 
