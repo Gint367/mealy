@@ -38,7 +38,7 @@ const MonthlyView: React.FC<MonthlyViewProps> = ({ days, weekDays, startingDay, 
                         <span className="text-xs sm:text-sm text-muted-foreground">{day}</span>
                         {event && (
                             <div className="mt-1">
-                                <span className="text-xs sm:text-sm truncate hidden sm:inline font-semibold">{event.title}x{event.portionSize}</span>
+                                <span className="text-xs sm:text-sm truncate hidden sm:block font-semibold">{event.portionSize}x {event.title}</span>
                             </div>
                         )}
                     </div>

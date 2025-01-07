@@ -151,7 +151,7 @@ export default function ShoppingListPage() {
                                                         <ul className="font-small text-muted-foreground">
                                                             {meal.recipe.ingredients.map((ri) => (
                                                                 <li key={ri.ingredient.id}>
-                                                                    {ri.ingredient.name} - {ri.amount} {ri.unit}
+                                                                    {ri.ingredient.name} - {ri.amount * meal.portions} {ri.unit}
                                                                 </li>
                                                             ))}
                                                         </ul>
